@@ -9,11 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@EnableScheduling
+@Transactional
 public class WebScraper {
 
     @Autowired
@@ -23,6 +28,7 @@ public class WebScraper {
 
     double usDollarConversion = 8.43;
 
+    @Scheduled(cron = "0 0 * * * 1-5")
     public void main() {
         List<Portfolio> portfolios = getPortfolios();
         for (int i = 0; i < portfolios.size(); i++) {
@@ -58,7 +64,7 @@ public class WebScraper {
         return percentChange;
     }
 
-    double getPercentOfPortfolio(double moneyInvestedInStock, double totalMoneyInvested) {;
+    double getPercentOfPortfolio(double moneyInvestedInStock, double totalMoneyInvested) {
         double percentOfPortfolio =  moneyInvestedInStock / totalMoneyInvested * 100;
         percentOfPortfolio = (double) Math.round(percentOfPortfolio * 100.0) / 100.0;
         return percentOfPortfolio;
@@ -111,7 +117,7 @@ public class WebScraper {
         try {
             final Document document = Jsoup.connect(url).get();
             Elements rows = document.select("table.genTbl.closedTbl.historicalTbl tr");
-            currentPrice = Double.parseDouble(rows.get(1).select("td:nth-of-type(2)").text());
+            currentPrice = Double.parseDouble(rows.get(1).select("td:nth-of-type(2)").text().replace(",", ""));
         }
         catch (Exception ex) {
             ex.printStackTrace();
@@ -132,7 +138,7 @@ public class WebScraper {
             final Document document = Jsoup.connect(url).get();
             Elements rows = document.select("table.genTbl.closedTbl.historicalTbl tr");
             int amountOfRows = rows.size();
-            lastMonthPrice = Double.parseDouble(rows.get(amountOfRows - 1).select("td:nth-of-type(2)").text());
+            lastMonthPrice = Double.parseDouble(rows.get(amountOfRows - 1).select("td:nth-of-type(2)").text().replace(",", ""));
         }
         catch (Exception ex) {
             ex.printStackTrace();

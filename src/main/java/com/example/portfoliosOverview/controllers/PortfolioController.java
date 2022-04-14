@@ -24,9 +24,17 @@ public class PortfolioController {
 
     @GetMapping("")
     public List<Portfolio> getPortfolios() {
-        //portfolioService.addStock(29L, new Stock("tesla-motors", "Tesla", 1, null, true, null));
-        //portfolioService.addStock(29L, new Stock("facebook-inc", "Facebook", 2, null, true, null));
         //portfolioService.addPortfolio(new Portfolio("Martin portfolio"));
+        //portfolioService.addStock(4L, new Stock("tesla-motors", "Tesla", 1, null, true, null));
+        //portfolioService.addStock(4L, new Stock("facebook-inc", "Facebook", 2, null, true, null));
+
+        //portfolioService.addPortfolio(new Portfolio("Mauritz portfolio"));
+        //portfolioService.addStock(1L, new Stock("axfood-ab", "Axfood", 50, null, false, 25978));
+        //portfolioService.addStock(1L, new Stock("visa-inc", "Visa", 2, null, true, null));
+        //portfolioService.addStock(1L, new Stock("mastercard-cl-a", "Mastercard", 1, null, true, null));
+        //portfolioService.addStock(1L, new Stock("microsoft-corp", "Microsoft", 1, null, true, null));
+        //portfolioService.addStock(1L, new Stock("securitas-b", "Securitas", 3, null, false, null));
+
         //webScraper.main();
         return portfolioService.getPortfolios();
     }

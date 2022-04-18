@@ -30,7 +30,9 @@ public class Stock {
 
     private Double percentOfPortfolio;
 
-    private Double percentChange;
+    private Double percentChange1Day;
+    private Double percentChange1Week;
+    private Double percentChange1Month;
 
     @Column(nullable = false)
     private Boolean isUS;
@@ -47,11 +49,13 @@ public class Stock {
     public Stock() {
     }
 
-    public Stock(String name, String displayName, Integer amountOfShares, Double percentChange, Boolean isUS, Integer cid) {
+    public Stock(String name, String displayName, Integer amountOfShares, Double percentChange1Day, Double percentChange1Week, Double percentChange1Month, Boolean isUS, Integer cid) {
         this.name = name;
         this.displayName = displayName;
         this.amountOfShares = amountOfShares;
-        this.percentChange = percentChange;
+        this.percentChange1Day = percentChange1Day;
+        this.percentChange1Week = percentChange1Week;
+        this.percentChange1Month = percentChange1Month;
         this.isUS = isUS;
         this.cid = cid;
     }
@@ -96,12 +100,28 @@ public class Stock {
         this.percentOfPortfolio = percentOfPortfolio;
     }
 
-    public Double getPercentChange() {
-        return percentChange;
+    public Double getPercentChange1Day() {
+        return percentChange1Day;
     }
 
-    public void setPercentChange(Double percentChange) {
-        this.percentChange = percentChange;
+    public void setPercentChange1Day(Double percentChange1Day) {
+        this.percentChange1Day = percentChange1Day;
+    }
+
+    public Double getPercentChange1Week() {
+        return percentChange1Week;
+    }
+
+    public void setPercentChange1Week(Double percentChange1Week) {
+        this.percentChange1Week = percentChange1Week;
+    }
+
+    public Double getPercentChange1Month() {
+        return percentChange1Month;
+    }
+
+    public void setPercentChange1Month(Double percentChange1Month) {
+        this.percentChange1Month = percentChange1Month;
     }
 
     public Boolean isUS() {

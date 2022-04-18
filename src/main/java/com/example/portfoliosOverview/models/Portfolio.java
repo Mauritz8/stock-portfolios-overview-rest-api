@@ -19,7 +19,9 @@ public class Portfolio {
     @Column(nullable = false)
     private String name;
 
-    private Double percentChange;
+    private Double percentChange1Day;
+    private Double percentChange1Week;
+    private Double percentChange1Month;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "portfolio")
     @JsonIgnoreProperties("portfolio")
@@ -48,12 +50,28 @@ public class Portfolio {
         this.name = name;
     }
 
-    public Double getPercentChange() {
-        return percentChange;
+    public Double getPercentChange1Day() {
+        return percentChange1Day;
     }
 
-    public void setPercentChange(Double percentChange) {
-        this.percentChange = percentChange;
+    public void setPercentChange1Day(Double percentChange1Day) {
+        this.percentChange1Day = percentChange1Day;
+    }
+
+    public Double getPercentChange1Week() {
+        return percentChange1Week;
+    }
+
+    public void setPercentChange1Week(Double percentChange1Week) {
+        this.percentChange1Week = percentChange1Week;
+    }
+
+    public Double getPercentChange1Month() {
+        return percentChange1Month;
+    }
+
+    public void setPercentChange1Month(Double percentChange1Month) {
+        this.percentChange1Month = percentChange1Month;
     }
 
     public List<Stock> getStocks() {

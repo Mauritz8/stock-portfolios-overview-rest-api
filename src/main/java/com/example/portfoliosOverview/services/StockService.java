@@ -22,10 +22,10 @@ public class StockService {
     }
 
     public Stock getBestStock() {
-        return stockRepository.findFirstByOrderByPercentChangeDesc();
+        return stockRepository.findFirstByOrderByPercentChange1MonthDesc();
     }
 
     public Stock getWorstStock() {
-        return stockRepository.findFirstByOrderByPercentChangeAsc();
+        return stockRepository.findFirstByOrderByPercentChange1MonthAsc();
     }
 }

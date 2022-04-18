@@ -24,14 +24,18 @@ public class Index {
 
     private String displayName = name;
 
-    private Double percentChange;
+    private Double percentChange1Day;
+    private Double percentChange1Week;
+    private Double percentChange1Month;
 
     public Index() {}
 
-    public Index(String name, String displayName, Double percentChange) {
+    public Index(String name, String displayName, Double percentChange1Day, Double percentChange1Week, Double percentChange1Month) {
         this.name = name;
         this.displayName = displayName;
-        this.percentChange = percentChange;
+        this.percentChange1Day = percentChange1Day;
+        this.percentChange1Week = percentChange1Week;
+        this.percentChange1Month = percentChange1Month;
     }
 
     public Long getId() {
@@ -58,11 +62,27 @@ public class Index {
         this.displayName = displayName;
     }
 
-    public Double getPercentChange() {
-        return percentChange;
+    public Double getPercentChange1Day() {
+        return percentChange1Day;
     }
 
-    public void setPercentChange(Double percentChange) {
-        this.percentChange = percentChange;
+    public void setPercentChange1Day(Double percentChange1Day) {
+        this.percentChange1Day = percentChange1Day;
+    }
+
+    public Double getPercentChange1Week() {
+        return percentChange1Week;
+    }
+
+    public void setPercentChange1Week(Double percentChange1Week) {
+        this.percentChange1Week = percentChange1Week;
+    }
+
+    public Double getPercentChange1Month() {
+        return percentChange1Month;
+    }
+
+    public void setPercentChange1Month(Double percentChange1Month) {
+        this.percentChange1Month = percentChange1Month;
     }
 }

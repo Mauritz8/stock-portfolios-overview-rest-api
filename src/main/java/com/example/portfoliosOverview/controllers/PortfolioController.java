@@ -1,13 +1,11 @@
 package com.example.portfoliosOverview.controllers;
 
 import com.example.portfoliosOverview.models.Portfolio;
+import com.example.portfoliosOverview.models.Stock;
 import com.example.portfoliosOverview.services.PortfolioService;
 import com.example.portfoliosOverview.webScraper.WebScraper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,6 +35,18 @@ public class PortfolioController {
 
         //webScraper.main();
         return portfolioService.getPortfolios();
+    }
+
+    @GetMapping("/name/{portfolioName}")
+    public List<Portfolio> getPortfoliosByName(@PathVariable String portfolioName) {
+        return portfolioService.getPortfoliosByName(portfolioName);
+    }
+
+    @PostMapping("/{portfolioId}/stocks/add")
+    public Stock addStock(@PathVariable Long portfolioId, @RequestParam String name, @RequestParam String displayName,
+                          @RequestParam int amountOfShares, @RequestParam boolean isUS, @RequestParam String cid) {
+        Integer parsedCid = cid.equals("") ? null : Integer.parseInt(cid);
+        return portfolioService.addStock(portfolioId, new Stock(name, displayName, amountOfShares, null, null, null, isUS, parsedCid));
     }
 }
 

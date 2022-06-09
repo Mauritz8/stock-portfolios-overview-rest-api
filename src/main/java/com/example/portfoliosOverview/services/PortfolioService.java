@@ -28,4 +28,8 @@ public class PortfolioService {
         portfolioRepository.save(portfolio);
         return stock;
     }
+
+    public List<Portfolio> getPortfoliosByName(String portfolioName) {
+        return portfolioRepository.findByName(portfolioName);
+    }
 }

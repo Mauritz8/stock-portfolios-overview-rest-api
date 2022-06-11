@@ -1,6 +1,7 @@
 package com.example.portfoliosOverview.repositories;
 
 import com.example.portfoliosOverview.models.Portfolio;
+import com.example.portfoliosOverview.models.Stock;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,7 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
     void update(Long portfolioId, Double percentChange1Month, Double percentChange1Week, Double percentChange1Day);
 
     List<Portfolio> findByName(String name);
+
+    @Query(value = "FROM Stock WHERE portfolio.id = ?1 AND name = ?2")
+    Stock findStockInPortfolioByName(Long portfolioId, String name);
 }

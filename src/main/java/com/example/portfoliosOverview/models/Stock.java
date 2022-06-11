@@ -49,13 +49,10 @@ public class Stock {
     public Stock() {
     }
 
-    public Stock(String name, String displayName, Integer amountOfShares, Double percentChange1Day, Double percentChange1Week, Double percentChange1Month, Boolean isUS, Integer cid) {
+    public Stock(String name, String displayName, Integer amountOfShares, Boolean isUS, Integer cid) {
         this.name = name;
         this.displayName = displayName;
         this.amountOfShares = amountOfShares;
-        this.percentChange1Day = percentChange1Day;
-        this.percentChange1Week = percentChange1Week;
-        this.percentChange1Month = percentChange1Month;
         this.isUS = isUS;
         this.cid = cid;
     }

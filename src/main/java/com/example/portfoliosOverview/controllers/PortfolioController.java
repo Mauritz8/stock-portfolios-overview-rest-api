@@ -1,23 +1,26 @@
 package com.example.portfoliosOverview.controllers;
 
 import com.example.portfoliosOverview.models.Portfolio;
+import com.example.portfoliosOverview.models.Stock;
 import com.example.portfoliosOverview.services.PortfolioService;
+import com.example.portfoliosOverview.services.StockService;
 import com.example.portfoliosOverview.webScraper.WebScraper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/portfolios")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class PortfolioController {
 
     @Autowired
     PortfolioService portfolioService;
+
+    @Autowired
+    StockService stockService;
 
     @Autowired
     WebScraper webScraper;
@@ -37,6 +40,22 @@ public class PortfolioController {
 
         //webScraper.main();
         return portfolioService.getPortfolios();
+    }
+
+    @GetMapping("/name/{portfolioName}")
+    public List<Portfolio> getPortfoliosByName(@PathVariable String portfolioName) {
+        return portfolioService.getPortfoliosByName(portfolioName);
+    }
+
+    @PostMapping("/{portfolioId}/stocks/add")
+    public void addStock(@PathVariable Long portfolioId, @RequestParam String name, @RequestParam String displayName,
+                          @RequestParam int amountOfShares, @RequestParam boolean isUS, @RequestParam String cid) {
+        Integer parsedCid = cid.equals("") ? null : Integer.parseInt(cid);
+        portfolioService.addStock(portfolioId, new Stock(name, displayName, amountOfShares, isUS, parsedCid));
+        Portfolio portfolio = portfolioService.getPortfolioById(portfolioId);
+        Stock stock = portfolioService.getStockInPortfolioByName(portfolioId, name);
+        webScraper.updateStockInPortfolio(stock);
+        webScraper.updatePortfolio(portfolio);
     }
 }
 

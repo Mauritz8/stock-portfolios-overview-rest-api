@@ -28,4 +28,8 @@ public class StockService {
     public Stock getWorstStock() {
         return stockRepository.findFirstByOrderByPercentChange1MonthAsc();
     }
+
+    public void deleteById(long id) {
+        stockRepository.deleteById(id);
+    }
 }

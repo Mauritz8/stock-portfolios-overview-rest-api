@@ -40,35 +40,48 @@ public class WebScraper {
         for (int i = 0; i < portfolios.size(); i++) {
             Portfolio portfolio = portfolios.get(i);
             List<Stock> stocks = portfolio.getStocks();
-            double percentChangePortfolio1Month = getPercentChangePortfolio1Month(portfolio);
-            double percentChangePortfolio1Week = getPercentChangePortfolio1Week(portfolio);
-            double percentChangePortfolio1Day = getPercentChangePortfolio1Day(portfolio);
-            portfolioRepository.update(portfolio.getId(), percentChangePortfolio1Month, percentChangePortfolio1Week, percentChangePortfolio1Day);
 
             for (int j = 0; j < stocks.size(); j++) {
                 Stock stock = stocks.get(j);
-                double percentChange1Month = getPercentChangeStock1Month(stock);
-                double percentChange1Week = getPercentChangeStock1Week(stock);
-                double percentChange1Day = getPercentChangeStock1Day(stock);
-                double totalMoneyInvested = getTotalMoneyInvested(portfolio);
-                double currentPrice = getCurrentStockPrice(stock);
-                double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
-                if (stock.isUS()) {
-                    moneyInvestedInStock *= usDollarConversion;
-                }
-                double percentOfPortfolio = getPercentOfPortfolio(moneyInvestedInStock, totalMoneyInvested);
-                stockRepository.update(stock.getId(), percentChange1Month, percentChange1Week, percentChange1Day, percentOfPortfolio);
+                updateStockInPortfolio(stock);
             }
+            updatePortfolio(portfolio);
         }
 
         List<Index> indexes = indexRepository.findAll();
         for (int i = 0; i < indexes.size(); i++) {
             Index index = indexes.get(i);
-            double percentChangeIndex1Month = getPercentChangeIndex1Month(index);
-            double percentChangeIndex1Week = getPercentChangeIndex1Week(index);
-            double percentChangeIndex1Day = getPercentChangeIndex1Day(index);
-            indexRepository.update(index.getId(), percentChangeIndex1Month, percentChangeIndex1Week, percentChangeIndex1Day);
+            updateIndex(index);
         }
+    }
+
+    public void updatePortfolio(Portfolio portfolio) {
+        double percentChangePortfolio1Month = getPercentChangePortfolio1Month(portfolio);
+        double percentChangePortfolio1Week = getPercentChangePortfolio1Week(portfolio);
+        double percentChangePortfolio1Day = getPercentChangePortfolio1Day(portfolio);
+        portfolioRepository.update(portfolio.getId(), percentChangePortfolio1Month, percentChangePortfolio1Week, percentChangePortfolio1Day);
+
+        for (Stock stock : portfolio.getStocks()) {
+            double totalMoneyInvested = getTotalMoneyInvested(portfolio);
+            double currentPrice = getCurrentStockPrice(stock);
+            double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
+            double percentOfPortfolio = getPercentOfPortfolio(moneyInvestedInStock, totalMoneyInvested);
+            stockRepository.updatePercentOfPortfolio(stock.getId(), percentOfPortfolio);
+        }
+    }
+
+    public void updateStockInPortfolio(Stock stock) {
+        double percentChange1Month = getPercentChangeStock1Month(stock);
+        double percentChange1Week = getPercentChangeStock1Week(stock);
+        double percentChange1Day = getPercentChangeStock1Day(stock);
+        stockRepository.update(stock.getId(), percentChange1Month, percentChange1Week, percentChange1Day);
+    }
+
+    void updateIndex(Index index) {
+        double percentChangeIndex1Month = getPercentChangeIndex1Month(index);
+        double percentChangeIndex1Week = getPercentChangeIndex1Week(index);
+        double percentChangeIndex1Day = getPercentChangeIndex1Day(index);
+        indexRepository.update(index.getId(), percentChangeIndex1Month, percentChangeIndex1Week, percentChangeIndex1Day);
     }
 
     List<Portfolio> getPortfolios() {

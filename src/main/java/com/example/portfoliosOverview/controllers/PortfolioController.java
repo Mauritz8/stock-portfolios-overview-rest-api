@@ -3,19 +3,24 @@ package com.example.portfoliosOverview.controllers;
 import com.example.portfoliosOverview.models.Portfolio;
 import com.example.portfoliosOverview.models.Stock;
 import com.example.portfoliosOverview.services.PortfolioService;
+import com.example.portfoliosOverview.services.StockService;
 import com.example.portfoliosOverview.webScraper.WebScraper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/portfolios")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class PortfolioController {
 
     @Autowired
     PortfolioService portfolioService;
+
+    @Autowired
+    StockService stockService;
 
     @Autowired
     WebScraper webScraper;

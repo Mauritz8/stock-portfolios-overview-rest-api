@@ -65,4 +65,5 @@ public class PortfolioService {
     public List<Stock> getStocksInPortfolioByName(long portfolioId, String name) {
         return portfolioRepository.findStocksInPortfolioByName(portfolioId, name);
     }
+  
 }

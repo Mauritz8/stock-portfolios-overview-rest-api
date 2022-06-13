@@ -60,4 +60,16 @@ public class PortfolioService {
     public List<Stock> getStocksInPortfolioByName(long portfolioId, String name) {
         return portfolioRepository.findStocksInPortfolioByName(portfolioId, name);
     }
+
+    public List<Portfolio> getPortfoliosByName(String portfolioName) {
+        return portfolioRepository.findByName(portfolioName);
+    }
+
+    public Portfolio getPortfolioById(Long id) {
+        return portfolioRepository.findById(id).get();
+    }
+
+    public Stock getStockInPortfolioByName(long portfolioId, String name) {
+        return portfolioRepository.findStockInPortfolioByName(portfolioId, name);
+    }
 }

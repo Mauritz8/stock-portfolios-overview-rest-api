@@ -1,5 +1,6 @@
 package com.example.portfoliosOverview.services;
 
+import com.example.portfoliosOverview.exceptions.portfolioWithNameAlreadyExists.PortfolioWithNameAlreadyExistsException;
 import com.example.portfoliosOverview.exceptions.stockAlreadyInPortfolio.StockAlreadyInPortfolioException;
 import com.example.portfoliosOverview.exceptions.stockNotExist.StockNotExistException;
 import com.example.portfoliosOverview.exceptions.stockWithCidNotExist.StockWithCidNotExistException;
@@ -26,6 +27,10 @@ public class PortfolioService {
     }
 
     public Portfolio addPortfolio(Portfolio portfolio) {
+        List<Portfolio> portfolios = portfolioRepository.findByName(portfolio.getName());
+        if (portfolios.size() > 0) {
+            throw new PortfolioWithNameAlreadyExistsException(portfolio.getName());
+        }
         return portfolioRepository.save(portfolio);
     }
 

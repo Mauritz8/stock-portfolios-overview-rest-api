@@ -3,7 +3,6 @@ package com.example.portfoliosOverview.controllers;
 import com.example.portfoliosOverview.models.Portfolio;
 import com.example.portfoliosOverview.models.Stock;
 import com.example.portfoliosOverview.services.PortfolioService;
-import com.example.portfoliosOverview.services.StockService;
 import com.example.portfoliosOverview.webScraper.WebScraper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/portfolios")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PortfolioController {
 
     @Autowired
     PortfolioService portfolioService;
-
-    @Autowired
-    StockService stockService;
 
     @Autowired
     WebScraper webScraper;
@@ -55,6 +51,11 @@ public class PortfolioController {
         Stock stock = portfolioService.getStocksInPortfolioByName(portfolioId, name).get(0);
         webScraper.updateStockInPortfolio(stock);
         webScraper.updatePortfolio(portfolio);
+    }
+
+    @PostMapping("/add")
+    public void addPortfolio(@RequestParam String name) {
+        portfolioService.addPortfolio(new Portfolio(name));
     }
 }
 

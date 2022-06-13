@@ -57,6 +57,11 @@ public class PortfolioController {
         webScraper.updateStockInPortfolio(stock);
         webScraper.updatePortfolio(portfolio);
     }
+
+    @PostMapping("/add")
+    public void addPortfolio(@RequestParam String name) {
+        portfolioService.addPortfolio(new Portfolio(name));
+    }
 }
 
 

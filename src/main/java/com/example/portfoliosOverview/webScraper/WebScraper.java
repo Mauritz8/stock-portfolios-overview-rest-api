@@ -85,7 +85,7 @@ public class WebScraper {
             stockRepository.updatePercentOfPortfolio(stock.getId(), percentOfPortfolio);
         }
     }
-  
+
     public void updateStockInPortfolio(Stock stock) {
         double percentChange1Month = getPercentChangeStock1Month(stock);
         double percentChange1Week = getPercentChangeStock1Week(stock);

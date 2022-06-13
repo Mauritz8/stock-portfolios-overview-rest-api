@@ -21,5 +21,5 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
     List<Portfolio> findByName(String name);
 
     @Query(value = "FROM Stock WHERE portfolio.id = ?1 AND name = ?2")
-    Stock findStockInPortfolioByName(Long portfolioId, String name);
+    List<Stock> findStocksInPortfolioByName(Long portfolioId, String name);
 }

@@ -16,6 +16,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -37,21 +39,35 @@ public class WebScraper {
     @Scheduled(cron = "0 0 23 * * 1-5")
     public void main() {
         List<Portfolio> portfolios = getPortfolios();
-        for (int i = 0; i < portfolios.size(); i++) {
-            Portfolio portfolio = portfolios.get(i);
+        for (Portfolio portfolio : portfolios) {
             List<Stock> stocks = portfolio.getStocks();
 
-            for (int j = 0; j < stocks.size(); j++) {
-                Stock stock = stocks.get(j);
+            for (Stock stock : stocks) {
                 updateStockInPortfolio(stock);
             }
             updatePortfolio(portfolio);
         }
 
         List<Index> indexes = indexRepository.findAll();
-        for (int i = 0; i < indexes.size(); i++) {
-            Index index = indexes.get(i);
+        for (Index index : indexes) {
             updateIndex(index);
+        }
+    }
+
+    public boolean stockExists(Stock stock) {
+        String urlLink = "https://in.investing.com/equities/" + stock.getName();
+        if (stock.getCid() != null) {
+            urlLink += "?cid=" + stock.getCid();
+        }
+        try {
+            URL url = new URL(urlLink);
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            http.setRequestProperty("User-Agent", "Mozilla/5.0");
+            int responseCode = http.getResponseCode();
+            http.disconnect();
+            return responseCode == 200;
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -146,8 +162,7 @@ public class WebScraper {
         double totalMoneyInvested = 0;
         List<Stock> stocks = portfolio.getStocks();
 
-        for (int j = 0; j < stocks.size(); j++) {
-            Stock stock = stocks.get(j);
+        for (Stock stock : stocks) {
             double currentPrice = getCurrentStockPrice(stock);
             double moneyInvested = stock.getAmountOfShares() * currentPrice;
             if (stock.isUS()) {
@@ -163,8 +178,7 @@ public class WebScraper {
         double totalMoneyInvested = getTotalMoneyInvested(portfolio);
         List<Stock> stocks = portfolio.getStocks();
 
-        for (int j = 0; j < stocks.size(); j++) {
-            Stock stock = stocks.get(j);
+        for (Stock stock : stocks) {
             double currentPrice = getCurrentStockPrice(stock);
             double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
             if (stock.isUS()) {
@@ -183,8 +197,7 @@ public class WebScraper {
         double totalMoneyInvested = getTotalMoneyInvested(portfolio);
         List<Stock> stocks = portfolio.getStocks();
 
-        for (int j = 0; j < stocks.size(); j++) {
-            Stock stock = stocks.get(j);
+        for (Stock stock : stocks) {
             double currentPrice = getCurrentStockPrice(stock);
             double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
             if (stock.isUS()) {
@@ -203,8 +216,7 @@ public class WebScraper {
         double totalMoneyInvested = getTotalMoneyInvested(portfolio);
         List<Stock> stocks = portfolio.getStocks();
 
-        for (int j = 0; j < stocks.size(); j++) {
-            Stock stock = stocks.get(j);
+        for (Stock stock : stocks) {
             double currentPrice = getCurrentStockPrice(stock);
             double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
             if (stock.isUS()) {
@@ -301,7 +313,6 @@ public class WebScraper {
         try {
             final Document document = Jsoup.connect(url).get();
             Elements rows = document.select("table.common-table.medium.js-table tr");
-            int amountOfRows = rows.size();
             lastDayPrice = Double.parseDouble(rows.get(2).select("td:nth-of-type(2)").text().replace(",", ""));
         }
         catch (Exception ex) {
@@ -383,7 +394,6 @@ public class WebScraper {
         try {
             final Document document = Jsoup.connect(url).get();
             Elements rows = document.select("table.common-table.medium.js-table tr");
-            int amountOfRows = rows.size();
             lastDayPrice = Double.parseDouble(rows.get(2).select("td:nth-of-type(2)").text().replace(",", ""));
         }
         catch (Exception ex) {

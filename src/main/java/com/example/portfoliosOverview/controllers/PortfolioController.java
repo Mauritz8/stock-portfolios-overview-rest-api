@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/portfolios")
@@ -53,7 +52,7 @@ public class PortfolioController {
         Integer parsedCid = cid.equals("") ? null : Integer.parseInt(cid);
         portfolioService.addStock(portfolioId, new Stock(name, displayName, amountOfShares, isUS, parsedCid));
         Portfolio portfolio = portfolioService.getPortfolioById(portfolioId);
-        Stock stock = portfolioService.getStockInPortfolioByName(portfolioId, name);
+        Stock stock = portfolioService.getStocksInPortfolioByName(portfolioId, name).get(0);
         webScraper.updateStockInPortfolio(stock);
         webScraper.updatePortfolio(portfolio);
     }

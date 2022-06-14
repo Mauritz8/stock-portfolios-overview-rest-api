@@ -36,4 +36,12 @@ public class IndexService {
 
         return indexRepository.save(index);
     }
+
+    public void deleteById(long id) throws Exception {
+        Index index = indexRepository.findById(id).orElse(null);
+        if (index == null) {
+            throw new Exception("There is no index with the id " + id);
+        }
+        indexRepository.deleteById(id);
+    }
 }

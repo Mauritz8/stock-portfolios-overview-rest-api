@@ -66,5 +66,13 @@ public class PortfolioService {
     public List<Stock> getStocksInPortfolioByName(long portfolioId, String name) {
         return portfolioRepository.findStocksInPortfolioByName(portfolioId, name);
     }
+
+    public void deleteById(long id) throws Exception {
+        Portfolio portfolio = portfolioRepository.findById(id).orElse(null);
+        if (portfolio == null) {
+            throw new Exception("There is no portfolio with the id " + id);
+        }
+        portfolioRepository.deleteById(id);
+    }
   
 }

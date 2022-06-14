@@ -27,9 +27,10 @@ public class PortfolioService {
     }
 
     public Portfolio addPortfolio(Portfolio portfolio) {
-        List<Portfolio> portfolios = portfolioRepository.findByName(portfolio.getName());
+        String name = portfolio.getName();
+        List<Portfolio> portfolios = portfolioRepository.findByName(name);
         if (portfolios.size() > 0) {
-            throw new PortfolioWithNameAlreadyExistsException(portfolio.getName());
+            throw new PortfolioWithNameAlreadyExistsException(name);
         }
         return portfolioRepository.save(portfolio);
     }

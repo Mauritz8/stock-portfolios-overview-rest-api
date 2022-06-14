@@ -71,6 +71,20 @@ public class WebScraper {
         }
     }
 
+    public boolean indexExists(String indexName) {
+        String urlLink = "https://in.investing.com/indices/" + indexName;
+        try {
+            URL url = new URL(urlLink);
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            http.setRequestProperty("User-Agent", "Mozilla/5.0");
+            int responseCode = http.getResponseCode();
+            http.disconnect();
+            return responseCode == 200;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public void updatePortfolio(Portfolio portfolio) {
         double percentChangePortfolio1Month = getPercentChangePortfolio1Month(portfolio);
         double percentChangePortfolio1Week = getPercentChangePortfolio1Week(portfolio);
@@ -93,7 +107,7 @@ public class WebScraper {
         stockRepository.update(stock.getId(), percentChange1Month, percentChange1Week, percentChange1Day);
     }
 
-    void updateIndex(Index index) {
+    public void updateIndex(Index index) {
         double percentChangeIndex1Month = getPercentChangeIndex1Month(index);
         double percentChangeIndex1Week = getPercentChangeIndex1Week(index);
         double percentChangeIndex1Day = getPercentChangeIndex1Day(index);

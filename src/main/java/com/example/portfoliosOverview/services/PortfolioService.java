@@ -1,9 +1,5 @@
 package com.example.portfoliosOverview.services;
 
-import com.example.portfoliosOverview.exceptions.portfolioWithNameAlreadyExists.PortfolioWithNameAlreadyExistsException;
-import com.example.portfoliosOverview.exceptions.stockAlreadyInPortfolio.StockAlreadyInPortfolioException;
-import com.example.portfoliosOverview.exceptions.stockNotExist.StockNotExistException;
-import com.example.portfoliosOverview.exceptions.stockWithCidNotExist.StockWithCidNotExistException;
 import com.example.portfoliosOverview.models.Portfolio;
 import com.example.portfoliosOverview.models.Stock;
 import com.example.portfoliosOverview.repositories.PortfolioRepository;
@@ -26,29 +22,29 @@ public class PortfolioService {
         return portfolioRepository.findAll();
     }
 
-    public Portfolio addPortfolio(Portfolio portfolio) {
+    public Portfolio addPortfolio(Portfolio portfolio) throws Exception {
         String name = portfolio.getName();
         List<Portfolio> portfolios = portfolioRepository.findByName(name);
         if (portfolios.size() > 0) {
-            throw new PortfolioWithNameAlreadyExistsException(name);
+            throw new Exception("There is already a portfolio with the name " + name);
         }
         return portfolioRepository.save(portfolio);
     }
 
-    public void addStock(Long portfolioId, Stock stock) {
+    public void addStock(Long portfolioId, Stock stock) throws Exception {
         Portfolio portfolio = portfolioRepository.getById(portfolioId);
 
         // check if stock is already in portfolio
         List<Stock> stocksWithNameInPortfolio = portfolioRepository.findStocksInPortfolioByName(portfolio.getId(), stock.getName());
         if (stocksWithNameInPortfolio.size() > 0) {
-            throw new StockAlreadyInPortfolioException(stock.getName(), portfolio.getName());
+            throw new Exception(stock.getName() + " in already in the portfolio " + portfolio.getName());
         }
 
         if (!webScraper.stockExists(stock)) {
             if (stock.getCid() == null) {
-                throw new StockNotExistException(stock.getName());
+                throw new Exception("There is no stock with the name " + stock.getName());
             }
-            throw new StockWithCidNotExistException(stock.getName(), stock.getCid());
+            throw new Exception("There is no stock with the name " + stock.getName() + " and cid " + stock.getCid());
         }
 
         portfolio.addStock(stock);

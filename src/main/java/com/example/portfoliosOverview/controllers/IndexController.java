@@ -29,7 +29,7 @@ public class IndexController {
     }
 
     @PostMapping("/add")
-    public void addIndex(@RequestParam String name, @RequestParam String displayName) {
+    public void addIndex(@RequestParam String name, @RequestParam String displayName) throws Exception {
         Index index = indexService.addIndex(new Index(name, displayName));
         webScraper.updateIndex(index);
     }

@@ -44,8 +44,9 @@ public class PortfolioController {
     }
 
     @PostMapping("/{portfolioId}/stocks/add")
-    public void addStock(@PathVariable Long portfolioId, @RequestParam String name, @RequestParam String displayName,
-                          @RequestParam int amountOfShares, @RequestParam boolean isUS, @RequestParam String cid) {
+    public void addStock(@PathVariable Long portfolioId, @RequestParam String name,
+                         @RequestParam String displayName, @RequestParam int amountOfShares,
+                         @RequestParam boolean isUS, @RequestParam String cid) throws Exception {
         Integer parsedCid = cid.equals("") ? null : Integer.parseInt(cid);
         portfolioService.addStock(portfolioId, new Stock(name, displayName, amountOfShares, isUS, parsedCid));
         Portfolio portfolio = portfolioService.getPortfolioById(portfolioId);
@@ -55,7 +56,7 @@ public class PortfolioController {
     }
 
     @PostMapping("/add")
-    public void addPortfolio(@RequestParam String name) {
+    public void addPortfolio(@RequestParam String name) throws Exception {
         portfolioService.addPortfolio(new Portfolio(name));
     }
 

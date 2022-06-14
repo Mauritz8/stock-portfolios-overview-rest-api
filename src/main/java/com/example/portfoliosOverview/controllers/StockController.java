@@ -3,10 +3,7 @@ package com.example.portfoliosOverview.controllers;
 import com.example.portfoliosOverview.models.Stock;
 import com.example.portfoliosOverview.services.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/stocks")
@@ -24,5 +21,10 @@ public class StockController {
     @GetMapping("worst")
     public Stock getWorstStock() {
         return stockService.getWorstStock();
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteStock(@PathVariable Long id) throws Exception {
+        stockService.deleteById(id);
     }
 }

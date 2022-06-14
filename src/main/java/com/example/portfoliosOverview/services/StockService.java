@@ -29,7 +29,11 @@ public class StockService {
         return stockRepository.findFirstByOrderByPercentChange1MonthAsc();
     }
 
-    public void deleteById(long id) {
+    public void deleteById(long id) throws Exception {
+        Stock stock = stockRepository.findById(id).orElse(null);
+        if (stock == null) {
+            throw new Exception("There is no stock with the id " + id);
+        }
         stockRepository.deleteById(id);
     }
 }

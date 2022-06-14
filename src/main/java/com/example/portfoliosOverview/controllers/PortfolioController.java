@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/portfolios")
@@ -18,9 +17,6 @@ public class PortfolioController {
 
     @Autowired
     PortfolioService portfolioService;
-
-    @Autowired
-    StockService stockService;
 
     @Autowired
     WebScraper webScraper;
@@ -61,6 +57,11 @@ public class PortfolioController {
     @PostMapping("/add")
     public void addPortfolio(@RequestParam String name) {
         portfolioService.addPortfolio(new Portfolio(name));
+    }
+
+    @DeleteMapping("{id}")
+    public void deletePortfolio(@PathVariable Long id) throws Exception {
+        portfolioService.deleteById(id);
     }
 }
 

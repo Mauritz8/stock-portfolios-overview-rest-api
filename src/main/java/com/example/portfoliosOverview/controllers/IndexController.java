@@ -33,4 +33,9 @@ public class IndexController {
         Index index = indexService.addIndex(new Index(name, displayName));
         webScraper.updateIndex(index);
     }
+
+    @DeleteMapping("{id}")
+    public void deleteIndex(@PathVariable Long id) throws Exception {
+        indexService.deleteById(id);
+    }
 }

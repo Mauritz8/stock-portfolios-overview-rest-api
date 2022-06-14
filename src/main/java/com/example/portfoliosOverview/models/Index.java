@@ -30,12 +30,9 @@ public class Index {
 
     public Index() {}
 
-    public Index(String name, String displayName, Double percentChange1Day, Double percentChange1Week, Double percentChange1Month) {
+    public Index(String name, String displayName) {
         this.name = name;
         this.displayName = displayName;
-        this.percentChange1Day = percentChange1Day;
-        this.percentChange1Week = percentChange1Week;
-        this.percentChange1Month = percentChange1Month;
     }
 
     public Long getId() {

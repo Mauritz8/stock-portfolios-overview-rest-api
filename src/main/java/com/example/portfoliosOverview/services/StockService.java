@@ -17,6 +17,10 @@ public class StockService {
         return stockRepository.findAll();
     }
 
+    public Stock getStockById(Long id) {
+        return stockRepository.findById(id).orElse(null);
+    }
+
     public Stock addStock(Stock stock) {
         return stockRepository.save(stock);
     }

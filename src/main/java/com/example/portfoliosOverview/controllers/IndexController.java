@@ -22,9 +22,6 @@ public class IndexController {
 
     @GetMapping("")
     public List<Index> getIndexes() {
-        //indexService.addIndex(new Index("us-spx-500", "S&P 500", null));
-        //indexService.addIndex(new Index("omx-stockholm", "OMX Stockholm", null));
-
         return indexService.getIndexes();
     }
 

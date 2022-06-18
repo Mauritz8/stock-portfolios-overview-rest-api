@@ -1,12 +1,15 @@
 package com.example.portfoliosOverview.controllers;
 
 import com.example.portfoliosOverview.models.Portfolio;
+import com.example.portfoliosOverview.models.SearchedStock;
 import com.example.portfoliosOverview.models.Stock;
 import com.example.portfoliosOverview.services.PortfolioService;
 import com.example.portfoliosOverview.services.StockService;
 import com.example.portfoliosOverview.webScraper.WebScraper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/stocks")
@@ -39,5 +42,10 @@ public class StockController {
         stockService.deleteById(id);
         Portfolio portfolio = portfolioService.getPortfolioById(portfolioId);
         webScraper.updatePortfolio(portfolio);
+    }
+
+    @GetMapping("search/{query}")
+    public List<SearchedStock> getStocksMatchingQuery(@PathVariable String query) {
+        return webScraper.findStocksMatchingQuery(query);
     }
 }

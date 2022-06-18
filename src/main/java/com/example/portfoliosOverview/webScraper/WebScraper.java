@@ -2,9 +2,11 @@ package com.example.portfoliosOverview.webScraper;
 
 import com.example.portfoliosOverview.models.Index;
 import com.example.portfoliosOverview.models.Portfolio;
+import com.example.portfoliosOverview.models.SearchedStock;
 import com.example.portfoliosOverview.models.Stock;
 import com.example.portfoliosOverview.repositories.IndexRepository;
 import com.example.portfoliosOverview.repositories.PortfolioRepository;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.jsoup.Jsoup;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -431,4 +434,48 @@ public class WebScraper {
         return moneyInvestedInStock;
     }
 
+
+    public List<SearchedStock> findStocksMatchingQuery(String query) {
+        String url = "https://in.investing.com/search/?q=" + query;
+
+        List<SearchedStock> stocks = new ArrayList<>();
+
+        try {
+            final Document document = Jsoup.connect(url).get();
+            Elements rows = document.select("div.js-inner-search-results-wrapper.common-table.medium a");
+
+            // remove last element because it's not a stock
+            rows.remove(rows.size() - 1);
+
+            for (Element row : rows) {
+                String name = row.select("span.td.col-name").text();
+                String[] infoTexts = row.select("span.td.col-type").text().split("-");
+                String type = "";
+                String exchange = "";
+                if (infoTexts.length == 2) {
+                    type = infoTexts[0].strip();
+                    exchange = infoTexts[1].strip();
+                }
+
+
+                // extract the cid url parameter from the full url if it exists
+                String cid = "";
+                String stockUrl = row.attr("href");
+                String[] splitUrl = stockUrl.split("\\?");
+                if (splitUrl.length == 2) {
+                    cid = splitUrl[1].split("\\=")[1];
+                }
+
+                // only get stocks from the Stockholm, NYSE, or NASDAQ exchange
+                if (type.equals("Share") && (exchange.equals("Stockholm") || exchange.equals("NYSE") || exchange.equals("NASDAQ"))) {
+                    stocks.add(new SearchedStock(name, exchange, cid));
+                }
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return stocks;
+    }
 }

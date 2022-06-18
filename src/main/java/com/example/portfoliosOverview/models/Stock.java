@@ -25,6 +25,10 @@ public class Stock {
 
     private String displayName = name;
 
+    private Integer currentPrice;
+
+    private Integer moneyInvestedInStock;
+
     @Column(nullable = false)
     private Integer amountOfShares;
 

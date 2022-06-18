@@ -19,6 +19,8 @@ public class Portfolio {
     @Column(nullable = false)
     private String name;
 
+    private Integer totalMoneyInvested;
+
     private Double percentChange1Day;
     private Double percentChange1Week;
     private Double percentChange1Month;

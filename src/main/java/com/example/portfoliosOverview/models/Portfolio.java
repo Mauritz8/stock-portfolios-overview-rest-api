@@ -1,6 +1,7 @@
 package com.example.portfoliosOverview.models;
 
 import com.fasterxml.jackson.annotation.*;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Portfolio {
     @Column(nullable = false)
     private String name;
 
-    private Integer totalMoneyInvested;
+    private Double totalMoneyInvested;
 
     private Double percentChange1Day;
     private Double percentChange1Week;
@@ -50,6 +51,14 @@ public class Portfolio {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Double getTotalMoneyInvested() {
+        return totalMoneyInvested;
+    }
+
+    public void setTotalMoneyInvested(Double totalMoneyInvested) {
+        this.totalMoneyInvested = totalMoneyInvested;
     }
 
     public Double getPercentChange1Day() {

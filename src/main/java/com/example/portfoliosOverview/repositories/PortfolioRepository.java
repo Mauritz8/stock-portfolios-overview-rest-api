@@ -13,11 +13,6 @@ import java.util.List;
 @Repository
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
 
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE Portfolio SET percentChange1Month = ?2, percentChange1Week = ?3, percentChange1Day = ?4 WHERE id = ?1")
-    void update(Long portfolioId, Double percentChange1Month, Double percentChange1Week, Double percentChange1Day);
-
     List<Portfolio> findByName(String name);
 
     @Query(value = "FROM Stock WHERE portfolio.id = ?1 AND name = ?2")

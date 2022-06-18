@@ -25,9 +25,9 @@ public class Stock {
 
     private String displayName = name;
 
-    private Integer currentPrice;
+    private Double currentPrice;
 
-    private Integer moneyInvestedInStock;
+    private Double moneyInvestedInStock;
 
     @Column(nullable = false)
     private Integer amountOfShares;
@@ -83,6 +83,22 @@ public class Stock {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public Double getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(Double currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
+    public Double getMoneyInvestedInStock() {
+        return moneyInvestedInStock;
+    }
+
+    public void setMoneyInvestedInStock(Double moneyInvestedInStock) {
+        this.moneyInvestedInStock = moneyInvestedInStock;
     }
 
     public Integer getAmountOfShares() {

@@ -5,7 +5,6 @@ import com.example.portfoliosOverview.models.Portfolio;
 import com.example.portfoliosOverview.models.Stock;
 import com.example.portfoliosOverview.repositories.IndexRepository;
 import com.example.portfoliosOverview.repositories.PortfolioRepository;
-import com.example.portfoliosOverview.repositories.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.jsoup.Jsoup;
@@ -29,8 +28,7 @@ public class WebScraper {
 
     @Autowired
     PortfolioRepository portfolioRepository;
-    @Autowired
-    StockRepository stockRepository;
+
     @Autowired
     IndexRepository indexRepository;
 
@@ -86,32 +84,43 @@ public class WebScraper {
     }
 
     public void updatePortfolio(Portfolio portfolio) {
+        double totalMoneyInvested = getTotalMoneyInvested(portfolio);
+        portfolio.setTotalMoneyInvested(totalMoneyInvested);
+
+        for (Stock stock : portfolio.getStocks()) {
+            double moneyInvestedInStock = stock.getMoneyInvestedInStock();
+            double percentOfPortfolio = getPercentOfPortfolio(moneyInvestedInStock, totalMoneyInvested);
+            stock.setPercentOfPortfolio(percentOfPortfolio);
+        }
+
         double percentChangePortfolio1Month = getPercentChangePortfolio1Month(portfolio);
         double percentChangePortfolio1Week = getPercentChangePortfolio1Week(portfolio);
         double percentChangePortfolio1Day = getPercentChangePortfolio1Day(portfolio);
-        portfolioRepository.update(portfolio.getId(), percentChangePortfolio1Month, percentChangePortfolio1Week, percentChangePortfolio1Day);
-
-        for (Stock stock : portfolio.getStocks()) {
-            double totalMoneyInvested = getTotalMoneyInvested(portfolio);
-            double currentPrice = getCurrentStockPrice(stock);
-            double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
-            double percentOfPortfolio = getPercentOfPortfolio(moneyInvestedInStock, totalMoneyInvested);
-            stockRepository.updatePercentOfPortfolio(stock.getId(), percentOfPortfolio);
-        }
+        portfolio.setPercentChange1Month(percentChangePortfolio1Month);
+        portfolio.setPercentChange1Week(percentChangePortfolio1Week);
+        portfolio.setPercentChange1Day(percentChangePortfolio1Day);
     }
 
     public void updateStockInPortfolio(Stock stock) {
+        double currentPrice = getCurrentStockPrice(stock);
+        double moneyInvestedInStock = getMoneyInvestedInStock(stock, currentPrice);
         double percentChange1Month = getPercentChangeStock1Month(stock);
         double percentChange1Week = getPercentChangeStock1Week(stock);
         double percentChange1Day = getPercentChangeStock1Day(stock);
-        stockRepository.update(stock.getId(), percentChange1Month, percentChange1Week, percentChange1Day);
+        stock.setCurrentPrice(currentPrice);
+        stock.setMoneyInvestedInStock(moneyInvestedInStock);
+        stock.setPercentChange1Month(percentChange1Month);
+        stock.setPercentChange1Week(percentChange1Week);
+        stock.setPercentChange1Day(percentChange1Day);
     }
 
     public void updateIndex(Index index) {
         double percentChangeIndex1Month = getPercentChangeIndex1Month(index);
         double percentChangeIndex1Week = getPercentChangeIndex1Week(index);
         double percentChangeIndex1Day = getPercentChangeIndex1Day(index);
-        indexRepository.update(index.getId(), percentChangeIndex1Month, percentChangeIndex1Week, percentChangeIndex1Day);
+        index.setPercentChange1Month(percentChangeIndex1Month);
+        index.setPercentChange1Week(percentChangeIndex1Week);
+        index.setPercentChange1Day(percentChangeIndex1Day);
     }
 
     List<Portfolio> getPortfolios() {
@@ -177,11 +186,7 @@ public class WebScraper {
         List<Stock> stocks = portfolio.getStocks();
 
         for (Stock stock : stocks) {
-            double currentPrice = getCurrentStockPrice(stock);
-            double moneyInvested = stock.getAmountOfShares() * currentPrice;
-            if (stock.isUS()) {
-                moneyInvested *= usDollarConversion;
-            }
+            double moneyInvested = stock.getMoneyInvestedInStock();
             totalMoneyInvested += moneyInvested;
         }
         return totalMoneyInvested;
@@ -189,17 +194,11 @@ public class WebScraper {
 
     double getPercentChangePortfolio1Month(Portfolio portfolio) {
         double percentChangePortfolio = 0;
-        double totalMoneyInvested = getTotalMoneyInvested(portfolio);
         List<Stock> stocks = portfolio.getStocks();
 
         for (Stock stock : stocks) {
-            double currentPrice = getCurrentStockPrice(stock);
-            double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
-            if (stock.isUS()) {
-                moneyInvestedInStock *= usDollarConversion;
-            }
-            double percentChange = getPercentChangeStock1Month(stock);
-            double percentOfPortfolio = getPercentOfPortfolio(moneyInvestedInStock, totalMoneyInvested);
+            double percentChange = stock.getPercentChange1Month();
+            double percentOfPortfolio = stock.getPercentOfPortfolio();
             percentChangePortfolio += percentChange * (percentOfPortfolio / 100);
             percentChangePortfolio = (double) Math.round(percentChangePortfolio * 100.0) / 100.0;
         }
@@ -208,17 +207,11 @@ public class WebScraper {
 
     double getPercentChangePortfolio1Week(Portfolio portfolio) {
         double percentChangePortfolio = 0;
-        double totalMoneyInvested = getTotalMoneyInvested(portfolio);
         List<Stock> stocks = portfolio.getStocks();
 
         for (Stock stock : stocks) {
-            double currentPrice = getCurrentStockPrice(stock);
-            double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
-            if (stock.isUS()) {
-                moneyInvestedInStock *= usDollarConversion;
-            }
             double percentChange = getPercentChangeStock1Week(stock);
-            double percentOfPortfolio = getPercentOfPortfolio(moneyInvestedInStock, totalMoneyInvested);
+            double percentOfPortfolio = stock.getPercentOfPortfolio();
             percentChangePortfolio += percentChange * (percentOfPortfolio / 100);
             percentChangePortfolio = (double) Math.round(percentChangePortfolio * 100.0) / 100.0;
         }
@@ -227,17 +220,11 @@ public class WebScraper {
 
     double getPercentChangePortfolio1Day(Portfolio portfolio) {
         double percentChangePortfolio = 0;
-        double totalMoneyInvested = getTotalMoneyInvested(portfolio);
         List<Stock> stocks = portfolio.getStocks();
 
         for (Stock stock : stocks) {
-            double currentPrice = getCurrentStockPrice(stock);
-            double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
-            if (stock.isUS()) {
-                moneyInvestedInStock *= usDollarConversion;
-            }
             double percentChange = getPercentChangeStock1Day(stock);
-            double percentOfPortfolio = getPercentOfPortfolio(moneyInvestedInStock, totalMoneyInvested);
+            double percentOfPortfolio = stock.getPercentOfPortfolio();
             percentChangePortfolio += percentChange * (percentOfPortfolio / 100);
             percentChangePortfolio = (double) Math.round(percentChangePortfolio * 100.0) / 100.0;
         }
@@ -433,6 +420,15 @@ public class WebScraper {
 
     long convertDateToEpoch(Date date) {
         return date.getTime() / 1000;
+    }
+
+    private double getMoneyInvestedInStock(Stock stock, double currentPrice) {
+        double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
+        if (stock.isUS()) {
+            moneyInvestedInStock *= usDollarConversion;
+        }
+        moneyInvestedInStock = (double) Math.round(moneyInvestedInStock * 100.0) / 100.0;
+        return moneyInvestedInStock;
     }
 
 }

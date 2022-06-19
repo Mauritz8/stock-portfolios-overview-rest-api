@@ -37,14 +37,14 @@ public class PortfolioService {
         // check if stock is already in portfolio
         List<Stock> stocksWithNameInPortfolio = portfolioRepository.findStocksInPortfolioByName(portfolio.getId(), stock.getName());
         if (stocksWithNameInPortfolio.size() > 0) {
-            throw new Exception(stock.getName() + " in already in the portfolio " + portfolio.getName());
+            throw new Exception(stock.getDisplayName() + " is already in the portfolio " + portfolio.getName());
         }
 
         if (!webScraper.stockExists(stock)) {
             if (stock.getCid() == null) {
-                throw new Exception("There is no stock with the name " + stock.getName());
+                throw new Exception("There is no stock with the name " + stock.getDisplayName());
             }
-            throw new Exception("There is no stock with the name " + stock.getName() + " and cid " + stock.getCid());
+            throw new Exception("There is no stock with the name " + stock.getDisplayName() + " and cid " + stock.getCid());
         }
 
         portfolio.addStock(stock);

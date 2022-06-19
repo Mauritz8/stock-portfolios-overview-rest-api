@@ -442,13 +442,10 @@ public class WebScraper {
 
         try {
             final Document document = Jsoup.connect(url).get();
-            Elements rows = document.select("div.js-inner-search-results-wrapper.common-table.medium a");
-
-            // remove last element because it's not a stock
-            rows.remove(rows.size() - 1);
+            Elements rows = document.select("div.js-inner-search-results-wrapper.common-table.medium a.tr.common-table-item");
 
             for (Element row : rows) {
-                String name = row.select("span.td.col-name").text();
+                String displayName = row.select("span.td.col-name").text();
                 String[] infoTexts = row.select("span.td.col-type").text().split("-");
                 String type = "";
                 String exchange = "";
@@ -456,23 +453,27 @@ public class WebScraper {
                     type = infoTexts[0].strip();
                     exchange = infoTexts[1].strip();
                 }
-
-
-                // extract the cid url parameter from the full url if it exists
-                String cid = "";
-                String stockUrl = row.attr("href");
-                String[] splitUrl = stockUrl.split("\\?");
-                if (splitUrl.length == 2) {
-                    cid = splitUrl[1].split("\\=")[1];
-                }
-
-                // only get stocks from the Stockholm, NYSE, or NASDAQ exchange
+                // only get rows that are stocks from the Stockholm, NYSE, or NASDAQ exchange
                 if (type.equals("Share") && (exchange.equals("Stockholm") || exchange.equals("NYSE") || exchange.equals("NASDAQ"))) {
-                    stocks.add(new SearchedStock(name, exchange, cid));
+                    boolean isUS = false;
+                    if (!exchange.equals("Stockholm")) {
+                        isUS = true;
+                    }
+
+                    // extract name of stock in url
+                    // extract the cid url parameter
+                    String stockUrl = row.attr("href");
+                    String[] splitUrl = stockUrl.split("\\?");
+                    String path = splitUrl[0];
+                    String name = path.split("/")[2];
+                    String cid = "";
+                    if (splitUrl.length == 2) {
+                        cid = splitUrl[1].split("\\=")[1];
+                    }
+                    stocks.add(new SearchedStock(name, displayName, isUS, cid));
                 }
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 

@@ -22,14 +22,13 @@ public class IndexService {
     }
 
     public Index addIndex(Index index) throws Exception {
-        String name = index.getName();
-        List<Index> indexes = indexRepository.findByName(name);
+        List<Index> indexes = indexRepository.findByName(index.getName());
         if (indexes.size() > 0) {
-            throw new Exception("You have already added the index " + name);
+            throw new Exception("You have already added the index " + index.getDisplayName());
         }
 
-        if (!webScraper.indexExists(name)) {
-            throw new Exception("There is no index with the name " + name);
+        if (!webScraper.indexExists(index.getName())) {
+            throw new Exception("There is no index with the name " + index.getDisplayName());
         }
 
         return indexRepository.save(index);

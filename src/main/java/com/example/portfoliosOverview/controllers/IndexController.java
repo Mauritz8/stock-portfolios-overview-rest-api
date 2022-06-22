@@ -2,6 +2,8 @@ package com.example.portfoliosOverview.controllers;
 
 
 import com.example.portfoliosOverview.models.Index;
+import com.example.portfoliosOverview.models.SearchedIndex;
+import com.example.portfoliosOverview.models.SearchedStock;
 import com.example.portfoliosOverview.services.IndexService;
 import com.example.portfoliosOverview.webScraper.WebScraper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +36,10 @@ public class IndexController {
     @DeleteMapping("{id}")
     public void deleteIndex(@PathVariable Long id) throws Exception {
         indexService.deleteById(id);
+    }
+
+    @GetMapping("search/{query}")
+    public List<SearchedIndex> getIndexesMatchingQuery(@PathVariable String query) {
+        return webScraper.findIndexesMatchingQuery(query);
     }
 }

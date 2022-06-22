@@ -1,9 +1,6 @@
 package com.example.portfoliosOverview.webScraper;
 
-import com.example.portfoliosOverview.models.Index;
-import com.example.portfoliosOverview.models.Portfolio;
-import com.example.portfoliosOverview.models.SearchedStock;
-import com.example.portfoliosOverview.models.Stock;
+import com.example.portfoliosOverview.models.*;
 import com.example.portfoliosOverview.repositories.IndexRepository;
 import com.example.portfoliosOverview.repositories.PortfolioRepository;
 import org.jsoup.nodes.Element;
@@ -478,5 +475,40 @@ public class WebScraper {
         }
 
         return stocks;
+    }
+
+    public List<SearchedIndex> findIndexesMatchingQuery(String query) {
+        String url = "https://in.investing.com/search/?q=" + query;
+
+        List<SearchedIndex> indexes = new ArrayList<>();
+
+        try {
+            final Document document = Jsoup.connect(url).get();
+            Elements rows = document.select("div.js-inner-search-results-wrapper.common-table.medium a.tr.common-table-item");
+
+            for (Element row : rows) {
+                String displayName = row.select("span.td.col-name").text();
+                String[] infoTexts = row.select("span.td.col-type").text().split("-");
+                String type = "";
+                String exchange = "";
+                if (infoTexts.length == 2) {
+                    type = infoTexts[0].strip();
+                    exchange = infoTexts[1].strip();
+                }
+                // only get rows that are indexes from the Stockholm, NYSE, or NASDAQ exchange
+                if (type.equals("Index") && (exchange.equals("Stockholm") || exchange.equals("NYSE") || exchange.equals("NASDAQ"))) {
+                    // extract name of stock in url
+                    String stockUrl = row.attr("href");
+                    String[] splitUrl = stockUrl.split("\\?");
+                    String path = splitUrl[0];
+                    String name = path.split("/")[2];
+                    indexes.add(new SearchedIndex(name, displayName));
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return indexes;
     }
 }

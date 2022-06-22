@@ -25,16 +25,6 @@ public class StockController {
     @Autowired
     WebScraper webScraper;
 
-    @GetMapping("best")
-    public Stock getBestStock() {
-        return stockService.getBestStock();
-    }
-
-    @GetMapping("worst")
-    public Stock getWorstStock() {
-        return stockService.getWorstStock();
-    }
-
     @DeleteMapping("{id}")
     public void deleteStock(@PathVariable Long id) throws Exception {
         Stock stock = stockService.getStockById(id);

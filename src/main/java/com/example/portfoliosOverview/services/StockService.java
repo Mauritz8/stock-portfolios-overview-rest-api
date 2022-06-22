@@ -25,14 +25,6 @@ public class StockService {
         return stockRepository.save(stock);
     }
 
-    public Stock getBestStock() {
-        return stockRepository.findFirstByOrderByPercentChange1MonthDesc();
-    }
-
-    public Stock getWorstStock() {
-        return stockRepository.findFirstByOrderByPercentChange1MonthAsc();
-    }
-
     public void deleteById(long id) throws Exception {
         Stock stock = stockRepository.findById(id).orElse(null);
         if (stock == null) {

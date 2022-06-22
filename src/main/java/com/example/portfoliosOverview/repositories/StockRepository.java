@@ -11,7 +11,4 @@ import javax.transaction.Transactional;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Long> {
 
-    Stock findFirstByOrderByPercentChange1MonthDesc();
-
-    Stock findFirstByOrderByPercentChange1MonthAsc();
 }

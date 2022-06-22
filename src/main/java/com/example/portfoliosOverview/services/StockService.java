@@ -25,11 +25,7 @@ public class StockService {
         return stockRepository.save(stock);
     }
 
-    public void deleteById(long id) throws Exception {
-        Stock stock = stockRepository.findById(id).orElse(null);
-        if (stock == null) {
-            throw new Exception("There is no stock with the id " + id);
-        }
+    public void deleteById(long id) {
         stockRepository.deleteById(id);
     }
 }

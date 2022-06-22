@@ -28,10 +28,14 @@ public class StockController {
     @DeleteMapping("{id}")
     public void deleteStock(@PathVariable Long id) throws Exception {
         Stock stock = stockService.getStockById(id);
-        Long portfolioId = stock.getPortfolio().getId();
-        stockService.deleteById(id);
-        Portfolio portfolio = portfolioService.getPortfolioById(portfolioId);
-        webScraper.updatePortfolio(portfolio);
+        if (stock == null) {
+            throw new Exception("There is no stock with the id " + id);
+        } else {
+            Long portfolioId = stock.getPortfolio().getId();
+            stockService.deleteById(id);
+            Portfolio portfolio = portfolioService.getPortfolioById(portfolioId);
+            webScraper.updatePortfolio(portfolio);
+        }
     }
 
     @GetMapping("search/{query}")

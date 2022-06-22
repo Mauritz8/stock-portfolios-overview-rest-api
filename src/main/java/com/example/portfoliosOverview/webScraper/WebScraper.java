@@ -3,6 +3,8 @@ package com.example.portfoliosOverview.webScraper;
 import com.example.portfoliosOverview.models.*;
 import com.example.portfoliosOverview.repositories.IndexRepository;
 import com.example.portfoliosOverview.repositories.PortfolioRepository;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,13 +15,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @EnableScheduling
@@ -32,7 +36,7 @@ public class WebScraper {
     @Autowired
     IndexRepository indexRepository;
 
-    double usDollarConversion = 8.43;
+    double usDollarConversion = 10;
 
     @Scheduled(cron = "0 0 23 * * 1-5")
     public void main() {
@@ -510,5 +514,33 @@ public class WebScraper {
         }
 
         return indexes;
+    }
+
+    private void setUSDollarConversion() {
+        try {
+            Properties properties = new Properties();
+            File file = new File("src/main/java/com/example/portfoliosOverview/webScraper/secret.properties");
+            properties.load(new FileInputStream(file));
+            String apiKey = properties.getProperty("API_KEY");
+            URL url = new URL("https://v6.exchangerate-api.com/v6/" + apiKey + "/pair/USD/SEK");
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            http.setRequestProperty("User-Agent", "Mozilla/5.0");
+            http.connect();
+            JsonObject jsonObject = JsonParser.parseReader(new InputStreamReader((InputStream) http.getContent())).getAsJsonObject();
+            usDollarConversion = jsonObject.get("conversion_rate").getAsDouble();
+            http.disconnect();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Scheduled(cron = "0 0 23 * * 1-5")
+    public void setUSDollarConversionScheduled() {
+        setUSDollarConversion();
+    }
+
+    @PostConstruct
+    private void setUSDollarConversionOnStartup() {
+        setUSDollarConversion();
     }
 }

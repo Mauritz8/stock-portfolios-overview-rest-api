@@ -88,15 +88,14 @@ public class WebScraper {
     }
 
     public void updatePortfolio(Portfolio portfolio) {
-        double totalMoneyInvested = 0;
+        double totalMoneyInvested = getTotalMoneyInvested(portfolio);
+        portfolio.setTotalMoneyInvested(totalMoneyInvested);
 
         for (Stock stock : portfolio.getStocks()) {
             double moneyInvestedInStock = stock.getMoneyInvestedInStock();
-            totalMoneyInvested += moneyInvestedInStock;
             double percentOfPortfolio = getPercentOfPortfolio(moneyInvestedInStock, totalMoneyInvested);
             stock.setPercentOfPortfolio(percentOfPortfolio);
         }
-        portfolio.setTotalMoneyInvested(totalMoneyInvested);
 
         setPercentChangesPortfolio(portfolio);
     }
@@ -179,6 +178,17 @@ public class WebScraper {
         double percentOfPortfolio =  moneyInvestedInStock / totalMoneyInvested * 100;
         percentOfPortfolio = (double) Math.round(percentOfPortfolio * 100.0) / 100.0;
         return percentOfPortfolio;
+    }
+
+    private double getTotalMoneyInvested(Portfolio portfolio) {
+        double totalMoneyInvested = 0;
+        List<Stock> stocks = portfolio.getStocks();
+
+        for (Stock stock : stocks) {
+            double moneyInvested = stock.getMoneyInvestedInStock();
+            totalMoneyInvested += moneyInvested;
+        }
+        return totalMoneyInvested;
     }
 
     public void setPercentChangesPortfolio(Portfolio portfolio) {

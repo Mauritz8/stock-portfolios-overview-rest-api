@@ -88,21 +88,17 @@ public class WebScraper {
     }
 
     public void updatePortfolio(Portfolio portfolio) {
-        double totalMoneyInvested = getTotalMoneyInvested(portfolio);
-        portfolio.setTotalMoneyInvested(totalMoneyInvested);
+        double totalMoneyInvested = 0;
 
         for (Stock stock : portfolio.getStocks()) {
             double moneyInvestedInStock = stock.getMoneyInvestedInStock();
+            totalMoneyInvested += moneyInvestedInStock;
             double percentOfPortfolio = getPercentOfPortfolio(moneyInvestedInStock, totalMoneyInvested);
             stock.setPercentOfPortfolio(percentOfPortfolio);
         }
+        portfolio.setTotalMoneyInvested(totalMoneyInvested);
 
-        double percentChangePortfolio1Month = getPercentChangePortfolio1Month(portfolio);
-        double percentChangePortfolio1Week = getPercentChangePortfolio1Week(portfolio);
-        double percentChangePortfolio1Day = getPercentChangePortfolio1Day(portfolio);
-        portfolio.setPercentChange1Month(percentChangePortfolio1Month);
-        portfolio.setPercentChange1Week(percentChangePortfolio1Week);
-        portfolio.setPercentChange1Day(percentChangePortfolio1Day);
+        setPercentChangesPortfolio(portfolio);
     }
 
     public void updateStockInPortfolio(Stock stock) {
@@ -185,54 +181,30 @@ public class WebScraper {
         return percentOfPortfolio;
     }
 
-    double getTotalMoneyInvested(Portfolio portfolio) {
-        double totalMoneyInvested = 0;
+    public void setPercentChangesPortfolio(Portfolio portfolio) {
+        double percentChangePortfolio1Month = 0;
+        double percentChangePortfolio1Week = 0;
+        double percentChangePortfolio1Day = 0;
+
         List<Stock> stocks = portfolio.getStocks();
-
         for (Stock stock : stocks) {
-            double moneyInvested = stock.getMoneyInvestedInStock();
-            totalMoneyInvested += moneyInvested;
-        }
-        return totalMoneyInvested;
-    }
-
-    double getPercentChangePortfolio1Month(Portfolio portfolio) {
-        double percentChangePortfolio = 0;
-        List<Stock> stocks = portfolio.getStocks();
-
-        for (Stock stock : stocks) {
-            double percentChange = stock.getPercentChange1Month();
             double percentOfPortfolio = stock.getPercentOfPortfolio();
-            percentChangePortfolio += percentChange * (percentOfPortfolio / 100);
-            percentChangePortfolio = (double) Math.round(percentChangePortfolio * 100.0) / 100.0;
+
+            double percentChange1Month = stock.getPercentChange1Month();
+            double percentChange1Week = stock.getPercentChange1Week();
+            double percentChange1Day = stock.getPercentChange1Day();
+
+            percentChangePortfolio1Month += percentChange1Month * (percentOfPortfolio / 100);
+            percentChangePortfolio1Week += percentChange1Week * (percentOfPortfolio / 100);
+            percentChangePortfolio1Day += percentChange1Day * (percentOfPortfolio / 100);
         }
-        return percentChangePortfolio;
-    }
+        percentChangePortfolio1Month = (double) Math.round(percentChangePortfolio1Month * 100.0) / 100.0;
+        percentChangePortfolio1Week = (double) Math.round(percentChangePortfolio1Week * 100.0) / 100.0;
+        percentChangePortfolio1Day = (double) Math.round(percentChangePortfolio1Day * 100.0) / 100.0;
 
-    double getPercentChangePortfolio1Week(Portfolio portfolio) {
-        double percentChangePortfolio = 0;
-        List<Stock> stocks = portfolio.getStocks();
-
-        for (Stock stock : stocks) {
-            double percentChange = getPercentChangeStock1Week(stock);
-            double percentOfPortfolio = stock.getPercentOfPortfolio();
-            percentChangePortfolio += percentChange * (percentOfPortfolio / 100);
-            percentChangePortfolio = (double) Math.round(percentChangePortfolio * 100.0) / 100.0;
-        }
-        return percentChangePortfolio;
-    }
-
-    double getPercentChangePortfolio1Day(Portfolio portfolio) {
-        double percentChangePortfolio = 0;
-        List<Stock> stocks = portfolio.getStocks();
-
-        for (Stock stock : stocks) {
-            double percentChange = getPercentChangeStock1Day(stock);
-            double percentOfPortfolio = stock.getPercentOfPortfolio();
-            percentChangePortfolio += percentChange * (percentOfPortfolio / 100);
-            percentChangePortfolio = (double) Math.round(percentChangePortfolio * 100.0) / 100.0;
-        }
-        return percentChangePortfolio;
+        portfolio.setPercentChange1Month(percentChangePortfolio1Month);
+        portfolio.setPercentChange1Week(percentChangePortfolio1Week);
+        portfolio.setPercentChange1Day(percentChangePortfolio1Day);
     }
 
     double getCurrentStockPrice(Stock stock) {

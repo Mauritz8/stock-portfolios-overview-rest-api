@@ -4,12 +4,14 @@ public class SearchedStock {
 
     private String name;
     private String displayName;
+    private String exchange;
     private boolean isUS;
     private String cid;
 
-    public SearchedStock(String name, String displayName, boolean isUS, String cid) {
+    public SearchedStock(String name, String displayName, String exchange, boolean isUS, String cid) {
         this.name = name;
         this.displayName = displayName;
+        this.exchange = exchange;
         this.isUS = isUS;
         this.cid = cid;
     }
@@ -28,6 +30,14 @@ public class SearchedStock {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getExchange() {
+        return exchange;
+    }
+
+    public void setExchange(String exchange) {
+        this.exchange = exchange;
     }
 
     public boolean isUS() {

@@ -453,7 +453,7 @@ public class WebScraper {
                     if (splitUrl.length == 2) {
                         cid = splitUrl[1].split("\\=")[1];
                     }
-                    stocks.add(new SearchedStock(name, displayName, isUS, cid));
+                    stocks.add(new SearchedStock(name, displayName, exchange, isUS, cid));
                 }
             }
         } catch (Exception ex) {

@@ -55,8 +55,12 @@ public class PortfolioService {
         return portfolioRepository.findByName(portfolioName);
     }
 
-    public Portfolio getPortfolioById(Long id) {
-        return portfolioRepository.findById(id).orElse(null);
+    public Portfolio getPortfolioById(Long id) throws Exception {
+        Portfolio portfolio = portfolioRepository.findById(id).orElse(null);
+        if (portfolio == null) {
+            throw new Exception("There is no portfolio with the id " + id);
+        }
+        return portfolio;
     }
 
     public List<Stock> getStocksInPortfolioByName(long portfolioId, String name) {
@@ -69,6 +73,12 @@ public class PortfolioService {
             throw new Exception("There is no portfolio with the id " + id);
         }
         portfolioRepository.deleteById(id);
+    }
+
+    public void updatePortfolio(Long id, String name) throws Exception {
+        Portfolio portfolio = getPortfolioById(id);
+        portfolio.setName(name);
+        portfolioRepository.save(portfolio);
     }
   
 }

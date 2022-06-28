@@ -3,7 +3,6 @@ package com.example.portfoliosOverview.controllers;
 import com.example.portfoliosOverview.models.Portfolio;
 import com.example.portfoliosOverview.models.Stock;
 import com.example.portfoliosOverview.services.PortfolioService;
-import com.example.portfoliosOverview.services.StockService;
 import com.example.portfoliosOverview.webScraper.WebScraper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +50,11 @@ public class PortfolioController {
     @DeleteMapping("{id}")
     public void deletePortfolio(@PathVariable Long id) throws Exception {
         portfolioService.deleteById(id);
+    }
+
+    @PutMapping("{id}")
+    public void updatePortfolio(@PathVariable Long id, @RequestParam String newName) throws Exception {
+        portfolioService.updatePortfolio(id, newName);
     }
 }
 

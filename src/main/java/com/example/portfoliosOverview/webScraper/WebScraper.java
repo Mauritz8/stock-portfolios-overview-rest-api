@@ -122,11 +122,11 @@ public class WebScraper {
         index.setPercentChange1Day(percentChangeIndex1Day);
     }
 
-    List<Portfolio> getPortfolios() {
+    private List<Portfolio> getPortfolios() {
         return portfolioRepository.findAll();
     }
 
-    double getPercentChangeStock1Month(Stock stock) {
+    private double getPercentChangeStock1Month(Stock stock) {
         double currentPrice = getCurrentStockPrice(stock);
         double lastMonthPrice = getLastMonthStockPrice(stock);
         double percentChange = (currentPrice / lastMonthPrice - 1) * 100;
@@ -134,7 +134,7 @@ public class WebScraper {
         return percentChange;
     }
 
-    double getPercentChangeStock1Week(Stock stock) {
+    private double getPercentChangeStock1Week(Stock stock) {
         double currentPrice = getCurrentStockPrice(stock);
         double lastWeekPrice = getLastWeekStockPrice(stock);
         double percentChange = (currentPrice / lastWeekPrice - 1) * 100;
@@ -142,7 +142,7 @@ public class WebScraper {
         return percentChange;
     }
 
-    double getPercentChangeStock1Day(Stock stock) {
+    private double getPercentChangeStock1Day(Stock stock) {
         double currentPrice = getCurrentStockPrice(stock);
         double lastDayPrice = getLastDayStockPrice(stock);
         double percentChange = (currentPrice / lastDayPrice - 1) * 100;
@@ -150,7 +150,7 @@ public class WebScraper {
         return percentChange;
     }
 
-    double getPercentChangeIndex1Month(Index index) {
+    private double getPercentChangeIndex1Month(Index index) {
         double currentPrice = getCurrentIndexPrice(index);
         double lastMonthPrice = getLastMonthIndexPrice(index);
         double percentChange = (currentPrice / lastMonthPrice - 1) * 100;
@@ -158,7 +158,7 @@ public class WebScraper {
         return percentChange;
     }
 
-    double getPercentChangeIndex1Week(Index index) {
+    private double getPercentChangeIndex1Week(Index index) {
         double currentPrice = getCurrentIndexPrice(index);
         double lastWeekPrice = getLastWeekIndexPrice(index);
         double percentChange = (currentPrice / lastWeekPrice - 1) * 100;
@@ -166,7 +166,7 @@ public class WebScraper {
         return percentChange;
     }
 
-    double getPercentChangeIndex1Day(Index index) {
+    private double getPercentChangeIndex1Day(Index index) {
         double currentPrice = getCurrentIndexPrice(index);
         double lastDayPrice = getLastDayIndexPrice(index);
         double percentChange = (currentPrice / lastDayPrice - 1) * 100;
@@ -174,7 +174,7 @@ public class WebScraper {
         return percentChange;
     }
 
-    double getPercentOfPortfolio(double moneyInvestedInStock, double totalMoneyInvested) {
+    private double getPercentOfPortfolio(double moneyInvestedInStock, double totalMoneyInvested) {
         double percentOfPortfolio =  moneyInvestedInStock / totalMoneyInvested * 100;
         percentOfPortfolio = (double) Math.round(percentOfPortfolio * 100.0) / 100.0;
         return percentOfPortfolio;
@@ -188,10 +188,11 @@ public class WebScraper {
             double moneyInvested = stock.getMoneyInvestedInStock();
             totalMoneyInvested += moneyInvested;
         }
+        totalMoneyInvested = (double) Math.round(totalMoneyInvested * 100.0) / 100.0;
         return totalMoneyInvested;
     }
 
-    public void setPercentChangesPortfolio(Portfolio portfolio) {
+    private void setPercentChangesPortfolio(Portfolio portfolio) {
         double percentChangePortfolio1Month = 0;
         double percentChangePortfolio1Week = 0;
         double percentChangePortfolio1Day = 0;
@@ -217,7 +218,7 @@ public class WebScraper {
         portfolio.setPercentChange1Day(percentChangePortfolio1Day);
     }
 
-    double getCurrentStockPrice(Stock stock) {
+    private double getCurrentStockPrice(Stock stock) {
         String url = "https://in.investing.com/equities/" + stock.getName() + "-historical-data";
         if (stock.getCid() != null) {
             url += "?cid=" + stock.getCid();
@@ -237,7 +238,7 @@ public class WebScraper {
         return currentPrice;
     }
 
-    double getLastMonthStockPrice(Stock stock) {
+    private double getLastMonthStockPrice(Stock stock) {
         long lastWorkingDayEpoch = convertDateToEpoch(new Date());
         Date date1MonthFromLastWorkingDay = getDate1MonthPrior(new Date());
         long date1MonthFromLastWorkingDayEpoch = convertDateToEpoch(date1MonthFromLastWorkingDay);
@@ -263,7 +264,7 @@ public class WebScraper {
         return lastMonthPrice;
     }
 
-    double getLastWeekStockPrice(Stock stock) {
+    private double getLastWeekStockPrice(Stock stock) {
         long lastWorkingDayEpoch = convertDateToEpoch(new Date());
         Date date1WeekFromLastWorkingDay = getDate1WeekPrior(new Date());
         long date1WeekFromLastWorkingDayEpoch = convertDateToEpoch(date1WeekFromLastWorkingDay);
@@ -289,7 +290,7 @@ public class WebScraper {
         return lastWeekPrice;
     }
 
-    double getLastDayStockPrice(Stock stock) {
+    private double getLastDayStockPrice(Stock stock) {
         String url = "https://in.investing.com/equities/" + stock.getName() + "-historical-data";
         if (stock.getCid() != null) {
             url += "?cid=" + stock.getCid();
@@ -310,7 +311,7 @@ public class WebScraper {
     }
 
 
-    double getCurrentIndexPrice(Index index) {
+    private double getCurrentIndexPrice(Index index) {
         String url = "https://in.investing.com/indices/" + index.getName() + "-historical-data";
 
         double currentPrice = 0;
@@ -327,7 +328,7 @@ public class WebScraper {
         return currentPrice;
     }
 
-    double getLastMonthIndexPrice(Index index) {
+    private double getLastMonthIndexPrice(Index index) {
         long lastWorkingDayEpoch = convertDateToEpoch(new Date());
         Date date1MonthFromLastWorkingDay = getDate1MonthPrior(new Date());
         long date1MonthFromLastWorkingDayEpoch = convertDateToEpoch(date1MonthFromLastWorkingDay);
@@ -350,7 +351,7 @@ public class WebScraper {
         return lastMonthPrice;
     }
 
-    double getLastWeekIndexPrice(Index index) {
+    private double getLastWeekIndexPrice(Index index) {
         long lastWorkingDayEpoch = convertDateToEpoch(new Date());
         Date date1WeekFromLastWorkingDay = getDate1WeekPrior(new Date());
         long date1WeekFromLastWorkingDayEpoch = convertDateToEpoch(date1WeekFromLastWorkingDay);
@@ -373,7 +374,7 @@ public class WebScraper {
         return lastWeekPrice;
     }
 
-    double getLastDayIndexPrice(Index index) {
+    private double getLastDayIndexPrice(Index index) {
         String url = "https://in.investing.com/indices/" + index.getName() + "-historical-data";
 
         double lastDayPrice = 0;
@@ -390,25 +391,25 @@ public class WebScraper {
         return lastDayPrice;
     }
 
-    Date getDate1MonthPrior(Date date) {
+    private Date getDate1MonthPrior(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.MONTH, -1);
         return cal.getTime();
     }
 
-    Date getDate1WeekPrior(Date date) {
+    private Date getDate1WeekPrior(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DAY_OF_MONTH, -7);
         return cal.getTime();
     }
 
-    long convertDateToEpoch(Date date) {
+    private long convertDateToEpoch(Date date) {
         return date.getTime() / 1000;
     }
 
-    private double getMoneyInvestedInStock(Stock stock, double currentPrice) {
+    public double getMoneyInvestedInStock(Stock stock, double currentPrice) {
         double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
         if (stock.isUS()) {
             moneyInvestedInStock *= usDollarConversion;

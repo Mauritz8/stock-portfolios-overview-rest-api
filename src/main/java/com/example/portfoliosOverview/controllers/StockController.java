@@ -25,6 +25,16 @@ public class StockController {
     @Autowired
     WebScraper webScraper;
 
+    @GetMapping
+    public List<Stock> getStocks() {
+        return stockService.getStocks();
+    }
+
+    @GetMapping("{id}")
+    public Stock getStock(@PathVariable Long id) {
+        return stockService.getStockById(id);
+    }
+
     @DeleteMapping("{id}")
     public void deleteStock(@PathVariable Long id) throws Exception {
         Stock stock = stockService.getStockById(id);
@@ -36,6 +46,13 @@ public class StockController {
             Portfolio portfolio = portfolioService.getPortfolioById(portfolioId);
             webScraper.updatePortfolio(portfolio);
         }
+    }
+
+    @PutMapping("{id}")
+    public Stock updateStock(@PathVariable Long id, @RequestParam int amountOfShares) throws Exception {
+        Stock stock = stockService.getStockById(id);
+        stockService.updateStock(stock, amountOfShares);
+        return stock;
     }
 
     @GetMapping("search/{query}")

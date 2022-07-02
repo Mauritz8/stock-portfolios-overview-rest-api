@@ -13,7 +13,7 @@ import java.util.List;
 )
 public class Portfolio {
 
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 
@@ -29,6 +29,10 @@ public class Portfolio {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "portfolio")
     @JsonIgnoreProperties("portfolio")
     private List<Stock> stocks;
+
+    @ManyToOne
+    @JoinColumn(name = "competition_id")
+    private Competition competition;
 
     public Portfolio() {
     }
@@ -91,6 +95,14 @@ public class Portfolio {
 
     public void setStocks(List<Stock> stocks) {
         this.stocks = stocks;
+    }
+
+    public Competition getCompetition() {
+        return competition;
+    }
+
+    public void setCompetition(Competition competition) {
+        this.competition = competition;
     }
 
     public void addStock(Stock stock) {

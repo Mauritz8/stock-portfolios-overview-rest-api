@@ -22,6 +22,10 @@ public class PortfolioService {
         return portfolioRepository.findAll();
     }
 
+    public List<Portfolio> getPortfoliosNotInCompetition() {
+        return portfolioRepository.findNotInCompetition();
+    }
+
     public Portfolio addPortfolio(Portfolio portfolio) throws Exception {
         String name = portfolio.getName();
         List<Portfolio> portfolios = portfolioRepository.findByName(name);

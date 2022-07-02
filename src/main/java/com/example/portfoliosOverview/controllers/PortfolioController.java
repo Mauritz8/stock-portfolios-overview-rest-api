@@ -25,6 +25,11 @@ public class PortfolioController {
         return portfolioService.getPortfolios();
     }
 
+    @GetMapping("/notInCompetition")
+    public List<Portfolio> getPortfoliosNotInCompetition() {
+        return portfolioService.getPortfoliosNotInCompetition();
+    }
+
     @GetMapping("/name/{portfolioName}")
     public List<Portfolio> getPortfoliosByName(@PathVariable String portfolioName) {
         return portfolioService.getPortfoliosByName(portfolioName);

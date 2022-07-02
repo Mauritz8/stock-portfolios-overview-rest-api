@@ -14,7 +14,7 @@ import javax.persistence.*;
 )
 public class Index {
 
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
 

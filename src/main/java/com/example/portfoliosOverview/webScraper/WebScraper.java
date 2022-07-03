@@ -40,6 +40,8 @@ public class WebScraper {
 
     @Scheduled(cron = "0 0 23 * * 1-5")
     public void main() {
+        setUSDollarConversion();
+
         List<Portfolio> portfolios = getPortfolios();
         for (Portfolio portfolio : portfolios) {
             List<Stock> stocks = portfolio.getStocks();
@@ -484,11 +486,6 @@ public class WebScraper {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }
-
-    @Scheduled(cron = "0 0 23 * * 1-5")
-    public void setUSDollarConversionScheduled() {
-        setUSDollarConversion();
     }
 
     @PostConstruct

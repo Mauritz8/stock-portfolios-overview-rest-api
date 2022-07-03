@@ -102,10 +102,15 @@ public class WebScraper {
 
     public void updateStockInPortfolio(Stock stock) {
         double currentPrice = getCurrentStockPrice(stock);
+        double lastMonthPrice = getLastMonthStockPrice(stock);
+        double lastWeekPrice = getLastWeekStockPrice(stock);
+        double lastDayPrice = getLastDayStockPrice(stock);
         double moneyInvestedInStock = getMoneyInvestedInStock(stock, currentPrice);
-        double percentChange1Month = getPercentChangeStock1Month(stock);
-        double percentChange1Week = getPercentChangeStock1Week(stock);
-        double percentChange1Day = getPercentChangeStock1Day(stock);
+
+        double percentChange1Month = getPercentChange(currentPrice, lastMonthPrice);
+        double percentChange1Week = getPercentChange(currentPrice, lastWeekPrice);
+        double percentChange1Day = getPercentChange(currentPrice, lastDayPrice);
+
         stock.setCurrentPrice(currentPrice);
         stock.setMoneyInvestedInStock(moneyInvestedInStock);
         stock.setPercentChange1Month(percentChange1Month);
@@ -114,9 +119,15 @@ public class WebScraper {
     }
 
     public void updateIndex(Index index) {
-        double percentChangeIndex1Month = getPercentChangeIndex1Month(index);
-        double percentChangeIndex1Week = getPercentChangeIndex1Week(index);
-        double percentChangeIndex1Day = getPercentChangeIndex1Day(index);
+        double currentPrice = getCurrentIndexPrice(index);
+        double lastMonthPrice = getLastMonthIndexPrice(index);
+        double lastWeekPrice = getLastWeekIndexPrice(index);
+        double lastDayPrice = getLastDayIndexPrice(index);
+
+        double percentChangeIndex1Month = getPercentChange(currentPrice, lastMonthPrice);
+        double percentChangeIndex1Week = getPercentChange(currentPrice, lastWeekPrice);
+        double percentChangeIndex1Day = getPercentChange(currentPrice, lastDayPrice);
+
         index.setPercentChange1Month(percentChangeIndex1Month);
         index.setPercentChange1Week(percentChangeIndex1Week);
         index.setPercentChange1Day(percentChangeIndex1Day);
@@ -126,50 +137,8 @@ public class WebScraper {
         return portfolioRepository.findAll();
     }
 
-    private double getPercentChangeStock1Month(Stock stock) {
-        double currentPrice = getCurrentStockPrice(stock);
-        double lastMonthPrice = getLastMonthStockPrice(stock);
-        double percentChange = (currentPrice / lastMonthPrice - 1) * 100;
-        percentChange = (double) Math.round(percentChange * 100.0) / 100.0;
-        return percentChange;
-    }
-
-    private double getPercentChangeStock1Week(Stock stock) {
-        double currentPrice = getCurrentStockPrice(stock);
-        double lastWeekPrice = getLastWeekStockPrice(stock);
-        double percentChange = (currentPrice / lastWeekPrice - 1) * 100;
-        percentChange = (double) Math.round(percentChange * 100.0) / 100.0;
-        return percentChange;
-    }
-
-    private double getPercentChangeStock1Day(Stock stock) {
-        double currentPrice = getCurrentStockPrice(stock);
-        double lastDayPrice = getLastDayStockPrice(stock);
-        double percentChange = (currentPrice / lastDayPrice - 1) * 100;
-        percentChange = (double) Math.round(percentChange * 100.0) / 100.0;
-        return percentChange;
-    }
-
-    private double getPercentChangeIndex1Month(Index index) {
-        double currentPrice = getCurrentIndexPrice(index);
-        double lastMonthPrice = getLastMonthIndexPrice(index);
-        double percentChange = (currentPrice / lastMonthPrice - 1) * 100;
-        percentChange = (double) Math.round(percentChange * 100.0) / 100.0;
-        return percentChange;
-    }
-
-    private double getPercentChangeIndex1Week(Index index) {
-        double currentPrice = getCurrentIndexPrice(index);
-        double lastWeekPrice = getLastWeekIndexPrice(index);
-        double percentChange = (currentPrice / lastWeekPrice - 1) * 100;
-        percentChange = (double) Math.round(percentChange * 100.0) / 100.0;
-        return percentChange;
-    }
-
-    private double getPercentChangeIndex1Day(Index index) {
-        double currentPrice = getCurrentIndexPrice(index);
-        double lastDayPrice = getLastDayIndexPrice(index);
-        double percentChange = (currentPrice / lastDayPrice - 1) * 100;
+    private double getPercentChange(double newValue, double oldValue) {
+        double percentChange = (newValue / oldValue - 1) * 100;
         percentChange = (double) Math.round(percentChange * 100.0) / 100.0;
         return percentChange;
     }

@@ -28,7 +28,7 @@ public class PortfolioService {
 
     public Portfolio addPortfolio(Portfolio portfolio) throws Exception {
         String name = portfolio.getName();
-        List<Portfolio> portfolios = portfolioRepository.findByName(name);
+        List<Portfolio> portfolios = portfolioRepository.findByNameNotInCompetition(name);
         if (portfolios.size() > 0) {
             throw new Exception("There is already a portfolio with the name " + name);
         }
@@ -53,10 +53,6 @@ public class PortfolioService {
 
         portfolio.addStock(stock);
         portfolioRepository.save(portfolio);
-    }
-
-    public List<Portfolio> getPortfoliosByName(String portfolioName) {
-        return portfolioRepository.findByName(portfolioName);
     }
 
     public Portfolio getPortfolioById(Long id) throws Exception {

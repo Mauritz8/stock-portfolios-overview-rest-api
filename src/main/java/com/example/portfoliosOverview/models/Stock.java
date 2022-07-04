@@ -34,6 +34,9 @@ public class Stock {
 
     private Double percentOfPortfolio;
 
+    private Double krChange1Day;
+    private Double krChange = 0D;
+
     private Double percentChange1Day;
     private Double percentChange1Week;
     private Double percentChange1Month;
@@ -115,6 +118,22 @@ public class Stock {
 
     public void setPercentOfPortfolio(Double percentOfPortfolio) {
         this.percentOfPortfolio = percentOfPortfolio;
+    }
+
+    public Double getKrChange1Day() {
+        return krChange1Day;
+    }
+
+    public void setKrChange1Day(Double krChange1Day) {
+        this.krChange1Day = krChange1Day;
+    }
+
+    public Double getKrChange() {
+        return krChange;
+    }
+
+    public void setKrChange(Double krChange) {
+        this.krChange = krChange;
     }
 
     public Double getPercentChange1Day() {

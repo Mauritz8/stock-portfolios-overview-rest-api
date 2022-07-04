@@ -30,11 +30,6 @@ public class PortfolioController {
         return portfolioService.getPortfoliosNotInCompetition();
     }
 
-    @GetMapping("/name/{portfolioName}")
-    public List<Portfolio> getPortfoliosByName(@PathVariable String portfolioName) {
-        return portfolioService.getPortfoliosByName(portfolioName);
-    }
-
     @PostMapping("/{portfolioId}/stocks/add")
     public void addStock(@PathVariable Long portfolioId, @RequestParam String name,
                          @RequestParam String displayName, @RequestParam int amountOfShares,

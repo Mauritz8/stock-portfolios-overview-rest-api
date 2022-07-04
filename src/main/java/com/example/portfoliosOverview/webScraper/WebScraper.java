@@ -48,6 +48,9 @@ public class WebScraper {
 
             for (Stock stock : stocks) {
                 updateStockInPortfolio(stock);
+                double krChange1Day = stock.getKrChange1Day();
+                stock.setKrChange(stock.getKrChange() + krChange1Day);
+                portfolio.setKrChange(portfolio.getKrChange() + krChange1Day);
             }
             updatePortfolio(portfolio);
         }
@@ -93,6 +96,7 @@ public class WebScraper {
         double totalMoneyInvested = getTotalMoneyInvested(portfolio);
         portfolio.setTotalMoneyInvested(totalMoneyInvested);
 
+        double krChangePortfolio1Day = 0;
         double percentChangePortfolio1Month = 0;
         double percentChangePortfolio1Week = 0;
         double percentChangePortfolio1Day = 0;
@@ -101,6 +105,7 @@ public class WebScraper {
             double percentOfPortfolio = getPercentOfPortfolio(moneyInvestedInStock, totalMoneyInvested);
             stock.setPercentOfPortfolio(percentOfPortfolio);
 
+            krChangePortfolio1Day += stock.getKrChange1Day();
             double percentChange1Month = stock.getPercentChange1Month();
             double percentChange1Week = stock.getPercentChange1Week();
             double percentChange1Day = stock.getPercentChange1Day();
@@ -114,6 +119,7 @@ public class WebScraper {
         percentChangePortfolio1Week = (double) Math.round(percentChangePortfolio1Week * 100.0) / 100.0;
         percentChangePortfolio1Day = (double) Math.round(percentChangePortfolio1Day * 100.0) / 100.0;
 
+        portfolio.setKrChange1Day(krChangePortfolio1Day);
         portfolio.setPercentChange1Month(percentChangePortfolio1Month);
         portfolio.setPercentChange1Week(percentChangePortfolio1Week);
         portfolio.setPercentChange1Day(percentChangePortfolio1Day);
@@ -126,12 +132,14 @@ public class WebScraper {
         double lastDayPrice = getLastDayStockPrice(stock);
         double moneyInvestedInStock = getMoneyInvestedInStock(stock, currentPrice);
 
+        double krChange1Day = getKrChange(currentPrice, lastDayPrice, stock);
         double percentChange1Month = getPercentChange(currentPrice, lastMonthPrice);
         double percentChange1Week = getPercentChange(currentPrice, lastWeekPrice);
         double percentChange1Day = getPercentChange(currentPrice, lastDayPrice);
 
         stock.setCurrentPrice(currentPrice);
         stock.setMoneyInvestedInStock(moneyInvestedInStock);
+        stock.setKrChange1Day(krChange1Day);
         stock.setPercentChange1Month(percentChange1Month);
         stock.setPercentChange1Week(percentChange1Week);
         stock.setPercentChange1Day(percentChange1Day);
@@ -160,6 +168,15 @@ public class WebScraper {
         double percentChange = (newValue / oldValue - 1) * 100;
         percentChange = (double) Math.round(percentChange * 100.0) / 100.0;
         return percentChange;
+    }
+
+    public double getKrChange(double newValue, double oldValue, Stock stock) {
+        double krChange = (newValue - oldValue) * stock.getAmountOfShares();
+        if (stock.isUS()) {
+            krChange *= usDollarConversion;
+        }
+        krChange = (double) Math.round(krChange * 100.0) / 100.0;
+        return krChange;
     }
 
     private double getPercentOfPortfolio(double moneyInvestedInStock, double totalMoneyInvested) {

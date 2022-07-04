@@ -22,6 +22,9 @@ public class Portfolio {
 
     private Double totalMoneyInvested;
 
+    private Double krChange1Day;
+    private Double krChange = 0D;
+
     private Double percentChange1Day;
     private Double percentChange1Week;
     private Double percentChange1Month;
@@ -63,6 +66,22 @@ public class Portfolio {
 
     public void setTotalMoneyInvested(Double totalMoneyInvested) {
         this.totalMoneyInvested = totalMoneyInvested;
+    }
+
+    public Double getKrChange1Day() {
+        return krChange1Day;
+    }
+
+    public void setKrChange1Day(Double krChange1Day) {
+        this.krChange1Day = krChange1Day;
+    }
+
+    public Double getKrChange() {
+        return krChange;
+    }
+
+    public void setKrChange(Double krChange) {
+        this.krChange = krChange;
     }
 
     public Double getPercentChange1Day() {

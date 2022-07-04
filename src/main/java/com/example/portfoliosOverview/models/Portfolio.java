@@ -35,6 +35,7 @@ public class Portfolio {
 
     @ManyToOne
     @JoinColumn(name = "competition_id")
+    @JsonIgnoreProperties("portfolios")
     private Competition competition;
 
     public Portfolio() {

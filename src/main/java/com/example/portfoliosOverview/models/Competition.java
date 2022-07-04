@@ -23,8 +23,9 @@ public class Competition {
     @Column(nullable = false)
     private Date endDate;
 
+    private int moneyForEachPlayer = 10000;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "competition")
-    @JsonIgnoreProperties("competition")
     private List<Portfolio> portfolios;
 
     public Competition() {}
@@ -65,6 +66,14 @@ public class Competition {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public int getMoneyForEachPlayer() {
+        return moneyForEachPlayer;
+    }
+
+    public void setMoneyForEachPlayer(int moneyForEachPlayer) {
+        this.moneyForEachPlayer = moneyForEachPlayer;
     }
 
     public List<Portfolio> getPortfolios() {

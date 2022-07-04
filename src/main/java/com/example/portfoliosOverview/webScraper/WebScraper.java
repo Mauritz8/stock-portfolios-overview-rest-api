@@ -115,6 +115,7 @@ public class WebScraper {
             percentChangePortfolio1Day += percentChange1Day * (percentOfPortfolio / 100);
         }
 
+        krChangePortfolio1Day = (double) Math.round(krChangePortfolio1Day * 100.0) / 100.0;
         percentChangePortfolio1Month = (double) Math.round(percentChangePortfolio1Month * 100.0) / 100.0;
         percentChangePortfolio1Week = (double) Math.round(percentChangePortfolio1Week * 100.0) / 100.0;
         percentChangePortfolio1Day = (double) Math.round(percentChangePortfolio1Day * 100.0) / 100.0;

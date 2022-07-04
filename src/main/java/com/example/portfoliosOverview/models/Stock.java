@@ -27,7 +27,7 @@ public class Stock {
 
     private Double currentPrice;
 
-    private Double moneyInvestedInStock;
+    private Integer moneyInvestedInStock;
 
     @Column(nullable = false)
     private Integer amountOfShares;
@@ -96,11 +96,11 @@ public class Stock {
         this.currentPrice = currentPrice;
     }
 
-    public Double getMoneyInvestedInStock() {
+    public Integer getMoneyInvestedInStock() {
         return moneyInvestedInStock;
     }
 
-    public void setMoneyInvestedInStock(Double moneyInvestedInStock) {
+    public void setMoneyInvestedInStock(Integer moneyInvestedInStock) {
         this.moneyInvestedInStock = moneyInvestedInStock;
     }
 

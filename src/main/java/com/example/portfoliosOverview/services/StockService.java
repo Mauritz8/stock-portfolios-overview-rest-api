@@ -40,7 +40,7 @@ public class StockService {
         }
         double krChange1DayPerStock = stock.getKrChange1Day() / stock.getAmountOfShares();
         stock.setAmountOfShares(newAmountOfShares);
-        double moneyInvestedInStock = webScraper.getMoneyInvestedInStock(stock, stock.getCurrentPrice());
+        int moneyInvestedInStock = webScraper.getMoneyInvestedInStock(stock, stock.getCurrentPrice());
         stock.setMoneyInvestedInStock(moneyInvestedInStock);
         stock.setKrChange1Day(krChange1DayPerStock * newAmountOfShares);
         stockRepository.save(stock);

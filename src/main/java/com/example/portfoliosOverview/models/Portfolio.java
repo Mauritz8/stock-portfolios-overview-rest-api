@@ -20,7 +20,7 @@ public class Portfolio {
     @Column(nullable = false)
     private String name;
 
-    private Double totalMoneyInvested;
+    private Integer totalMoneyInvested;
 
     private Double krChange1Day;
     private Double krChange = 0D;
@@ -60,11 +60,11 @@ public class Portfolio {
         this.name = name;
     }
 
-    public Double getTotalMoneyInvested() {
+    public Integer getTotalMoneyInvested() {
         return totalMoneyInvested;
     }
 
-    public void setTotalMoneyInvested(Double totalMoneyInvested) {
+    public void setTotalMoneyInvested(Integer totalMoneyInvested) {
         this.totalMoneyInvested = totalMoneyInvested;
     }
 

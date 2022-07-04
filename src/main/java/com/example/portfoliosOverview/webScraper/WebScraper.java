@@ -93,7 +93,7 @@ public class WebScraper {
     }
 
     public void updatePortfolio(Portfolio portfolio) {
-        double totalMoneyInvested = getTotalMoneyInvested(portfolio);
+        int totalMoneyInvested = getTotalMoneyInvested(portfolio);
         portfolio.setTotalMoneyInvested(totalMoneyInvested);
 
         double krChangePortfolio1Day = 0;
@@ -131,7 +131,7 @@ public class WebScraper {
         double lastMonthPrice = getLastMonthStockPrice(stock);
         double lastWeekPrice = getLastWeekStockPrice(stock);
         double lastDayPrice = getLastDayStockPrice(stock);
-        double moneyInvestedInStock = getMoneyInvestedInStock(stock, currentPrice);
+        int moneyInvestedInStock = getMoneyInvestedInStock(stock, currentPrice);
 
         double krChange1Day = getKrChange(currentPrice, lastDayPrice, stock);
         double percentChange1Month = getPercentChange(currentPrice, lastMonthPrice);
@@ -180,21 +180,20 @@ public class WebScraper {
         return krChange;
     }
 
-    private double getPercentOfPortfolio(double moneyInvestedInStock, double totalMoneyInvested) {
+    private double getPercentOfPortfolio(double moneyInvestedInStock, int totalMoneyInvested) {
         double percentOfPortfolio =  moneyInvestedInStock / totalMoneyInvested * 100;
         percentOfPortfolio = (double) Math.round(percentOfPortfolio * 100.0) / 100.0;
         return percentOfPortfolio;
     }
 
-    private double getTotalMoneyInvested(Portfolio portfolio) {
-        double totalMoneyInvested = 0;
+    private int getTotalMoneyInvested(Portfolio portfolio) {
+        int totalMoneyInvested = 0;
         List<Stock> stocks = portfolio.getStocks();
 
         for (Stock stock : stocks) {
             double moneyInvested = stock.getMoneyInvestedInStock();
             totalMoneyInvested += moneyInvested;
         }
-        totalMoneyInvested = (double) Math.round(totalMoneyInvested * 100.0) / 100.0;
         return totalMoneyInvested;
     }
 
@@ -389,12 +388,11 @@ public class WebScraper {
         return date.getTime() / 1000;
     }
 
-    public double getMoneyInvestedInStock(Stock stock, double currentPrice) {
-        double moneyInvestedInStock = stock.getAmountOfShares() * currentPrice;
+    public int getMoneyInvestedInStock(Stock stock, double currentPrice) {
+        int moneyInvestedInStock = (int) (stock.getAmountOfShares() * currentPrice);
         if (stock.isUS()) {
             moneyInvestedInStock *= usDollarConversion;
         }
-        moneyInvestedInStock = (double) Math.round(moneyInvestedInStock * 100.0) / 100.0;
         return moneyInvestedInStock;
     }
 

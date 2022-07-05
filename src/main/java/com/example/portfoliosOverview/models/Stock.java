@@ -52,6 +52,8 @@ public class Stock {
     @JsonIgnoreProperties("stocks")
     private Portfolio portfolio;
 
+    private Boolean isSold = false;
+
 
     public Stock() {
     }
@@ -184,4 +186,13 @@ public class Stock {
     public void setPortfolio(@NonNull Portfolio portfolio) {
         this.portfolio = portfolio;
     }
+
+    public Boolean isSold() {
+        return isSold;
+    }
+
+    public void setSold(Boolean sold) {
+        isSold = sold;
+    }
+
 }

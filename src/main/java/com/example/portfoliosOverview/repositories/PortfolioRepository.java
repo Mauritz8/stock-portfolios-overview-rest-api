@@ -19,4 +19,7 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
 
     @Query(value = "FROM Portfolio WHERE competition.id IS NULL")
     List<Portfolio> findNotInCompetition();
+
+    @Query(value = "FROM Stock WHERE portfolio.id = ?1 AND isSold = false")
+    List<Stock> findNotSold(Long portfolioId);
 }

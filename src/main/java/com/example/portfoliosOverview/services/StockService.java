@@ -31,7 +31,9 @@ public class StockService {
     }
 
     public void deleteById(long id) {
-        stockRepository.deleteById(id);
+        Stock stock = stockRepository.getById(id);
+        stock.setSold(true);
+        stockRepository.save(stock);
     }
 
     public void updateStock(Stock stock, int newAmountOfShares) throws Exception {

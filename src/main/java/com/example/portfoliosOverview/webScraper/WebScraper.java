@@ -188,7 +188,7 @@ public class WebScraper {
 
     private int getTotalMoneyInvested(Portfolio portfolio) {
         int totalMoneyInvested = 0;
-        List<Stock> stocks = portfolio.getStocks();
+        List<Stock> stocks = portfolioRepository.findNotSold(portfolio.getId());
 
         for (Stock stock : stocks) {
             double moneyInvested = stock.getMoneyInvestedInStock();

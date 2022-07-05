@@ -41,6 +41,7 @@ public class StockService {
             throw new Exception("You need 1 share at the minimum");
         }
         double krChange1DayPerStock = stock.getKrChange1Day() / stock.getAmountOfShares();
+        krChange1DayPerStock = (double) Math.round(krChange1DayPerStock * 100.0) / 100.0;
         stock.setAmountOfShares(newAmountOfShares);
         int moneyInvestedInStock = webScraper.getMoneyInvestedInStock(stock, stock.getCurrentPrice());
         stock.setMoneyInvestedInStock(moneyInvestedInStock);
